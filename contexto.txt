@@ -1,0 +1,1053 @@
+﻿
+===== .\src\index.css =====
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/roboto-mono";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: 'Roboto Mono Variable', ui-monospace, monospace;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --kurio-bg: #130c0a;
+  --kurio-surface: #231611;
+  --kurio-band: #38210f;
+  --kurio-border: #3f2318;
+  --kurio-accent: #d1894b;
+  --kurio-accent-soft: #e89a54;
+  --kurio-text: #f4f0eb;
+  --kurio-muted: #cfb18c;
+  --kurio-required: #ef805e;
+
+  --background: var(--kurio-bg);
+  --foreground: var(--kurio-text);
+  --card: var(--kurio-surface);
+  --card-foreground: var(--kurio-text);
+  --popover: var(--kurio-surface);
+  --popover-foreground: var(--kurio-text);
+  --primary: var(--kurio-accent);
+  --primary-foreground: var(--kurio-bg);
+  --secondary: var(--kurio-surface);
+  --secondary-foreground: var(--kurio-text);
+  --muted: var(--kurio-surface);
+  --muted-foreground: var(--kurio-muted);
+  --accent: var(--kurio-band);
+  --accent-foreground: var(--kurio-text);
+  --border: var(--kurio-border);
+  --input: var(--kurio-border);
+  --ring: var(--kurio-accent);
+  --radius: 0.5rem;
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+  html {
+    @apply font-sans;
+    }
+}
+===== .\src\components\layout\SiteFooter.tsx =====
+import { FOOTER } from '@/features/home/figma-content'
+
+const cols = 'grid grid-cols-[302px_302px_302px_1fr]'
+
+export function SiteFooter() {
+  return (
+    <footer className="mx-auto mt-24 w-full max-w-[1200px] text-[#f3ece3]">
+      <div className="grid grid-cols-[297px_265px_266px_1fr] bg-[#221612] pb-4 pt-8">
+        {FOOTER.features.map((f, i) => (
+          <div key={f.l} className={i === 0 ? 'pl-12' : 'border-l border-[#d18a4e] pl-4'}>
+            <div className="grid size-[74px] place-items-center rounded-full bg-[#d18a4e] text-2xl font-bold text-[#140d0b]">{f.l}</div>
+            <h3 className="mt-[9px] text-[19px] font-bold leading-6">{f.t}</h3>
+            <p className="mt-[7px] max-w-[200px] text-sm leading-[22px] text-[#b8946a]">{f.d}</p>
+          </div>
+        ))}
+        <div className="border-l border-[#d18a4e] pl-4">
+          <h3 className="max-w-[260px] text-lg font-bold leading-4">Antecipe-se ao prÃ³ximo lanÃ§amento</h3>
+          <div className="mt-[15px] flex w-[325px] opacity-80">
+            <input disabled aria-label="E-mail" placeholder="digite seu e-mail..." className="h-10 w-[240px] rounded-l bg-[#2c1a10] px-3 text-sm placeholder:text-[#b8946a]" />
+            <button disabled className="h-10 w-[85px] rounded-r bg-[#d18a4e] text-base font-bold text-[#140d0b]">Enviar</button>
+          </div>
+          <p className="mt-3 w-[300px] text-[13px] leading-[22px] text-[#b8946a]">Receba lanÃ§amentos selecionados, histÃ³rias de criadores e novidades do mercado.</p>
+        </div>
+      </div>
+      <div className={`${cols} h-[88px] items-center bg-[#3a2413] pl-8 text-sm`}>
+        <b className="tracking-widest">KURIO</b><span className="max-w-[230px]">{FOOTER.tagline}</span><span>{FOOTER.email}</span><span>{FOOTER.phone}</span>
+      </div>
+      <div className={`${cols} h-[236px] bg-[#221612] pl-8 pt-[29px]`}>
+        {FOOTER.cols.map(([h, links]) => (
+          <div key={h}>
+            <h4 className="text-lg font-bold leading-6">{h}</h4>
+            <ul className="mt-0.5 text-sm">{links.map((l) => <li key={l} className="flex h-[30px] items-center">{l}</li>)}</ul>
+          </div>
+        ))}
+        <div>
+          <h4 className="text-lg font-bold leading-6">Redes sociais</h4>
+          <div className="mt-3.5 flex gap-2">{['f', 'ig', 't', 'in', 'yt'].map((x) => <span key={x} className="grid size-8 place-items-center rounded border border-[#6b4423] text-xs font-bold text-[#d18a4e]">{x}</span>)}</div>
+          <h4 className="mt-7 text-lg font-bold leading-6">Carteiras compatÃ­veis</h4>
+          <span className="mt-[7px] flex h-[25px] w-[228px] items-center justify-between rounded border border-[#5a3a1f] bg-[#3a2413] px-2 text-[9px] font-bold text-[#d18a4e]"><i className="not-italic">METAMASK</i>â€¢<i className="not-italic">WALLETCONNECT</i>â€¢<i className="not-italic">COINBASE</i></span>
+        </div>
+      </div>
+      <p className="pb-4 pt-[11px] text-center text-sm">Â© 2026 Kurio. Propriedade digital para todos.</p>
+    </footer>
+  )
+}
+
+===== .\src\components\layout\SiteHeader.tsx =====
+import { LogIn, Search, ShoppingCart } from 'lucide-react'
+import { CART_BADGE, NAV } from '@/features/home/figma-content'
+
+export function SiteHeader({ active = 'InÃ­cio' }: { active?: string }) {
+  return (
+    <header className="relative mx-auto hidden h-[70px] w-full max-w-[1200px] items-center justify-between border-b border-[#3b2a20] md:flex">
+      <a href="/" className="text-[13px] font-bold tracking-[0.12em] text-[#f3ece3]">KURIO</a>
+      <nav aria-label="Principal" className="absolute left-1/2 flex h-full -translate-x-1/2 gap-9">
+        {NAV.map((n) => (
+          <a key={n} href={n === 'InÃ­cio' ? '/' : undefined} aria-current={n === active ? 'page' : undefined}
+            aria-disabled={n !== 'InÃ­cio' || undefined}
+            className={`relative flex items-center text-base ${n === active ? 'font-bold text-[#e89b55] after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-[#d18a4e]' : 'text-[#f3ece3]'}`}>
+            {n}
+          </a>
+        ))}
+      </nav>
+      <div className="flex items-center gap-6">
+        <button aria-label="Buscar" className="text-[#f3ece3]"><Search size={22} /></button>
+        <a href="/cart" aria-label="Carrinho" className="relative text-[#f3ece3]">
+          <ShoppingCart size={22} />
+          <span className="absolute -right-2 -top-2 grid size-4 place-items-center rounded-full bg-[#d18a4e] text-[9px] font-bold text-[#140d0b]">{CART_BADGE}</span>
+        </a>
+        <a href="/login" className="flex h-9 items-center gap-1.5 rounded-md bg-[#d18a4e] px-3 text-sm font-bold text-[#140d0b]"><LogIn size={16} />Entrar</a>
+      </div>
+    </header>
+  )
+}
+
+===== .\src\features\home\figma-content.ts =====
+// ConteÃºdo estÃ¡tico copiado do Figma. TODO: mover para mocks/ (facets, badges, posts) quando a API tiver esses campos.
+export const CATEGORIES = [['Arte digital', 'arte-digital', 33], ['Fotografia', 'fotografia', 12], ['MÃºsica', 'musica', 65], ['Arte 3D', 'arte-3d', 39], ['ColecionÃ¡veis', 'colecionaveis', 23], ['Generativa', 'generativa', 17], ['Jogos', 'jogos', 19], ['Assinaturas', 'assinaturas', 13], ['Utilidade', 'utilidade', 18]] as const
+export const NETWORKS = [['Ethereum', 119], ['Polygon', 78], ['Solana', 86]] as const
+export const PRICE_BOUNDS = { min: 0.02, max: 12.3 }
+export const CART_BADGE = 6
+export const TABS = [{ id: 'all', label: 'Todos os NFTs' }, { id: 'new', label: 'Novos lanÃ§amentos' }, { id: 'hot', label: 'Em alta' }] as const
+export const SORTS = [
+  { id: 'newest', label: 'Listados recentemente' }, { id: 'price_asc', label: 'Menor preÃ§o' },
+  { id: 'price_desc', label: 'Maior preÃ§o' }, { id: 'popular', label: 'Mais populares' },
+] as const
+export const NAV = ['InÃ­cio', 'Mercado', 'Criadores', 'Aprenda']
+export const BANNERS = [
+  { title: ['LanÃ§amentos gÃªnesis', 'de ediÃ§Ã£o limitada'], text: 'Colecione ediÃ§Ãµes escassas diretamente dos criadores antes da revelaÃ§Ã£o pÃºblica.', art: 'Emerald Ape #042' },
+  { title: ['Arte digital selecionada', 'e muito mais'], text: 'Explore novos artistas, coleÃ§Ãµes verificadas e obras digitais que definem a cultura.', art: 'Ivory Baron #088' },
+]
+export const BLOG = {
+  title: 'DiÃ¡rio da Cunhagem',
+  subtitle: 'HistÃ³rias, guias e insights para colecionadores sobre o universo da propriedade digital.',
+  posts: [
+    { date: '12 de setembro', read: '6 min', title: 'Como funciona a propriedade de NFTs', text: 'Aprenda a colecionar, negociar e verificar ativos digitais.', art: 'Ivory Baron #088' },
+    { date: '13 de setembro', read: '2 min', title: '10 artistas digitais para acompanhar', text: 'ConheÃ§a criadores que moldam a cultura digital.', art: 'Emerald Ape #042' },
+    { date: '15 de setembro', read: '3 min', title: 'Raridade, atributos e procedÃªncia', text: 'Entenda raridade, procedÃªncia, direitos autorais e utilidade.', art: 'Violet Nomad #314' },
+    { date: '15 de setembro', read: '2 min', title: 'Como proteger sua carteira', text: 'Proteja sua carteira, seus ativos e sua identidade.', art: 'Golden Beat #207' },
+  ],
+}
+export const FOOTER = {
+  features: [
+    { l: 'W', t: 'SeguranÃ§a da carteira', d: 'Proteja sua carteira e colecione arte digital verificada com confianÃ§a.' },
+    { l: 'C', t: 'Criadores em destaque', d: 'ConheÃ§a artistas, estÃºdios e comunidades que moldam a cultura digital na rede.' },
+    { l: 'D', t: 'Alertas de lanÃ§amentos', d: 'Receba calendÃ¡rios de cunhagem, novidades de listas de acesso e anÃ¡lises do mercado.' },
+  ],
+  tagline: 'Feito para colecionadores, criadores e cultura', email: 'contato@email.com', phone: '+55 11 4002 8922',
+  cols: [
+    ['Meu perfil', ['Meu perfil', 'Minha coleÃ§Ã£o', 'Atividade', 'EstÃºdio do criador', 'Lista de interesse']],
+    ['Central de ajuda', ['Central de ajuda', 'Como comprar NFTs', 'Carteira e seguranÃ§a', 'PolÃ­tica do mercado', 'Denunciar item']],
+    ['ColeÃ§Ãµes', ['Arte digital', 'Fotografia', 'MÃºsica', 'Arte 3D', 'Utilidade']],
+  ] as const,
+}
+
+===== .\src\features\home\HomePage.tsx =====
+import heroImg from '@/assets/nfts/emerald-ape-800.webp'
+import './skeleton.css'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
+import { ArrowRight, ChevronDown, ChevronRight, Heart, Search, ShoppingCart, SlidersHorizontal } from 'lucide-react'
+import { useState } from 'react'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { nftsQuery } from '@/features/catalog/queries'
+import type { Nft } from '@/shared/api/types'
+import { BANNERS, BLOG, CATEGORIES, NETWORKS, PRICE_BOUNDS, SORTS, TABS } from './figma-content'
+
+const route = getRouteApi('/')
+const art = (items: Nft[] | undefined, title: string, i = 0) => (items?.find((n) => n.title === title) ?? items?.[i % (items?.length || 1)])?.images[0]
+const accent = 'text-[#e89b55]'
+
+function Card({ nft }: { nft: Nft }) {
+  return (
+    <article className="group relative w-full">
+      <div className="relative grid h-[300px] place-items-center bg-[#221612]">
+        {nft.badge && <span className="absolute left-0 top-0 bg-[#d18a4e] px-3 py-1 text-sm text-[#140d0b]">{nft.badge}</span>}
+        <img src={nft.thumbnail} alt={nft.title} width={250} height={250} loading="lazy" className="size-[250px] rounded-[14px] object-contain" />
+        <div className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 gap-2 group-focus-within:flex group-hover:flex">
+          <button disabled aria-label="Adicionar ao carrinho" className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3]"><ShoppingCart size={16} /></button>
+          <button disabled aria-label="Favoritar" className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3]"><Heart size={16} /></button>
+          <a href={`/nft/${nft.id}`} aria-label={`Ver ${nft.title}`} className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3]"><Search size={16} /></a>
+        </div>
+      </div>
+      <h3 className="mt-[10px] text-base text-[#f3ece3]">{nft.title}</h3>
+      <p className={`mt-1.5 text-lg font-bold ${accent}`}>{nft.priceEth} ETH{nft.compareAtPriceEth && <span className="ml-2 font-normal text-[#b8946a]">{nft.compareAtPriceEth} ETH</span>}</p>
+    </article>
+  )
+}
+
+const Skeleton = () => <div aria-hidden><div className="skeleton h-[300px]" /><div className="skeleton mt-[10px] h-4 w-40" /><div className="skeleton mt-1.5 h-5 w-24" /></div>
+
+function PriceRange({ onApply }: { onApply: (lo: string, hi: string) => void }) {
+  const [lo, setLo] = useState(PRICE_BOUNDS.min), [hi, setHi] = useState(PRICE_BOUNDS.max)
+  const th = '[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:size-[14px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#d18a4e] [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:size-[14px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[#d18a4e]'
+  const cls = `pointer-events-none absolute inset-0 w-full appearance-none bg-transparent ${th}`
+  const fmt = (n: number) => n.toFixed(2).replace('.', ',')
+  return (
+    <div>
+      <div className="relative mt-4 h-4"><div className="absolute inset-x-0 top-[7px] h-0.5 bg-[#d18a4e]" />
+        <input aria-label="PreÃ§o mÃ­nimo" type="range" min={PRICE_BOUNDS.min} max={PRICE_BOUNDS.max} step={0.01} value={lo} onChange={(e) => setLo(Math.min(+e.target.value, hi))} className={cls} />
+        <input aria-label="PreÃ§o mÃ¡ximo" type="range" min={PRICE_BOUNDS.min} max={PRICE_BOUNDS.max} step={0.01} value={hi} onChange={(e) => setHi(Math.max(+e.target.value, lo))} className={cls} /></div>
+      <p className="mt-4 text-sm text-[#f3ece3]">PreÃ§o: {fmt(lo)} - {fmt(hi)} ETH</p>
+      <button onClick={() => onApply(String(lo), String(hi))} className="mt-3 rounded bg-[#d18a4e] px-3 py-1.5 text-sm font-bold text-[#140d0b]">Aplicar</button>
+    </div>
+  )
+}
+
+export function HomePage() {
+  const s = route.useSearch(), navigate = route.useNavigate()
+  const tab = s.tab ?? 'all', page = s.page ?? 1
+  const sort = tab === 'hot' ? 'popular' : tab === 'new' ? 'newest' : (s.sort ?? 'newest')
+  const q = useQuery({ ...nftsQuery({ q: s.q, category: s.category, minPrice: s.min, maxPrice: s.max, sort, page, pageSize: 9 }), placeholderData: keepPreviousData })
+  const items = q.data?.items
+  const go = (patch: Partial<typeof s>) => navigate({ search: (p) => ({ ...p, ...patch, page: 1 }) })
+  const toggleCat = (c: string) => go({ category: s.category?.includes(c) ? s.category.filter((x) => x !== c) || undefined : [...(s.category ?? []), c] })
+  const featured = items?.[3]
+
+  return (
+    <div className="min-h-screen bg-[#140d0b] font-mono text-[#f3ece3]">
+      <SiteHeader />
+      <main className="mx-auto w-full max-w-[1200px]">
+        {/* MOBILE */}
+        <div className="px-[22px] pb-28 pt-9 md:hidden">
+          <div className="flex gap-3"><div className="flex h-[43px] flex-1 items-center gap-3 rounded-2xl bg-[#221612] px-4 text-[#b8946a]"><Search size={20} />Explorar coleÃ§Ãµes</div>
+            <button aria-label="Filtros" className="grid size-[42px] place-items-center rounded-2xl bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-[#140d0b]"><SlidersHorizontal size={20} /></button></div>
+          <section className="relative mt-6 h-[178px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#5a3a24] to-[#2a1c15] p-4">
+            <p className="text-[10px]">Bem-vindo Ã  Kurio</p><h1 className="mt-2 text-[17px] font-bold leading-7">SEJA DONO DA<br />CULTURA DIGITAL</h1>
+            <p className="mt-2 w-[135px] text-[10px] leading-4 text-[#b8946a]">Descubra NFTs selecionados de criadores do mundo todo.</p>
+            <a href="#catalogo" className={`mt-1 inline-block text-[10px] font-bold ${accent}`}>EXPLORAR â†’</a>
+            <img src={heroImg} alt="" width={130} height={130} className="absolute right-4 top-[10px] size-[130px] rounded-2xl object-cover" />
+          </section>
+          <div className="mt-5 flex gap-4 text-[13px]">{TABS.map((t) => <button key={t.id} onClick={() => go({ tab: t.id })} className={tab === t.id ? 'border-b-2 border-[#d18a4e]' : ''}>{t.label}</button>)}</div>
+          <div id="catalogo" className="mt-5 grid grid-cols-2 gap-x-[15px]">
+            {[0, 1].map((col) => <div key={col} className={`space-y-4 ${col ? 'mt-[30px]' : ''}`}>{(items ?? []).filter((_, i) => i % 2 === col).map((n) => (
+              <a key={n.id} href={`/nft/${n.id}`} className="block rounded-[22px] bg-[#221612] p-2.5 text-[13px]"><img src={n.images[0]} alt={n.title} width={150} height={150} className="aspect-square w-full rounded-2xl object-cover" /><p className="mt-2">{n.title}</p><p className={`font-bold ${accent}`}>{n.priceEth} ETH</p></a>))}</div>)}
+          </div>
+        </div>
+
+        {/* DESKTOP */}
+        <div className="hidden md:block">
+          <section className="relative mt-[33px] flex h-[450px] items-start justify-between">
+            <div className="pl-10 pt-[41px]">
+              <p className="mb-2 text-base">Bem-vindo Ã  Kurio</p>
+              <h1 className="text-[43px] font-bold leading-[70px]">SEJA DONO DO FUTURO<br />DA ARTE DIGITAL</h1>
+              <p className="mt-0.5 max-w-[550px] text-sm leading-6 text-[#b8946a]">Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.</p>
+              <a href="#catalogo" className="mt-8 inline-grid h-10 w-[140px] place-items-center rounded-md bg-[#d18a4e] text-sm font-bold text-[#140d0b]">EXPLORAR</a>
+            </div>
+            <div className="absolute bottom-[43px] left-[600px] flex gap-1.5" aria-hidden>{[0, 1, 2].map((i) => <i key={i} className="size-2 rounded-full bg-[#d18a4e]" />)}</div>
+            <img src={heroImg} alt="Emerald Ape #042" width={450} height={450} className="size-[450px] rounded-[28px] object-cover" />
+          </section>
+
+          <div id="catalogo" className="mt-24 grid grid-cols-[310px_1fr] gap-12">
+            <aside>
+              <div className="bg-[#221612] p-5">
+                <h2 className="mb-3 text-lg font-bold">ColeÃ§Ãµes</h2>
+                <ul>{CATEGORIES.map(([c, slug, n]) => (
+                  <li key={slug}><button onClick={() => toggleCat(slug)} aria-pressed={s.category?.includes(slug)} className={`flex h-10 w-full items-center justify-between pl-3 pr-[13px] text-[15px] ${s.category?.includes(slug) ? 'text-[#e89b55]' : 'text-[#b8946a]'}`}><span>{c}</span><b className="text-[#f3ece3]">({n})</b></button></li>))}</ul>
+                <h2 className="mb-1 mt-6 text-lg font-bold">Faixa de preÃ§o</h2>
+                <PriceRange onApply={(lo, hi) => go({ min: lo, max: hi })} />
+                <h2 className="mb-2 mt-8 text-lg font-bold">Rede</h2>
+                <ul>{NETWORKS.map(([c, n]) => <li key={c} className="flex h-10 items-center justify-between pl-3 pr-px text-[15px] text-[#b8946a]"><span>{c}</span><span>({n})</span></li>)}</ul>
+              </div>
+              <div className="mt-6 overflow-hidden rounded-b-3xl bg-[#221612] pt-6">
+                <p className={`px-5 text-2xl font-bold ${accent}`}>NFT EM DESTAQUE</p><p className="mb-3 mt-3 text-center text-[22px] font-bold">OFERTA LIMITADA</p>
+                {featured ? <img src={featured.images[0]} alt={featured.title} width={311} height={365} loading="lazy" className="h-[365px] w-full rounded-3xl object-cover" /> : <div className="skeleton h-[365px]" />}
+              </div>
+            </aside>
+
+            <section aria-labelledby="cat-h">
+              <h2 id="cat-h" className="sr-only">CatÃ¡logo</h2>
+              <div className="mb-6 flex items-center justify-between text-[15px]">
+                <div className="flex gap-5">{TABS.map((t) => <button key={t.id} onClick={() => go({ tab: t.id })} aria-pressed={tab === t.id} className={`pb-0.5 ${tab === t.id ? `border-b-2 border-[#d18a4e] ${accent}` : ''}`}>{t.label}</button>)}</div>
+                <label className="relative flex items-center">Ordenar por:
+                  <select value={s.sort ?? 'newest'} onChange={(e) => go({ sort: e.target.value as typeof s.sort, tab: 'all' })} className="appearance-none bg-transparent pr-5 text-[#f3ece3] focus-visible:outline-2 focus-visible:outline-[#d18a4e]">{SORTS.map((o) => <option key={o.id} value={o.id} className="bg-[#221612]">{o.label}</option>)}</select>
+                  <ChevronDown size={14} className="pointer-events-none absolute right-0" /></label>
+              </div>
+              {q.isError ? (
+                <div role="alert" className="grid h-[300px] place-items-center bg-[#221612] text-center"><div><p>NÃ£o foi possÃ­vel carregar os NFTs.</p><p className="mt-1 text-xs text-[#b8946a]">{(q.error as { status?: number; code?: string; message?: string } | null)?.code ?? (q.error as Error | null)?.message}</p><button onClick={() => q.refetch()} className="mt-3 rounded bg-[#d18a4e] px-4 py-2 font-bold text-[#140d0b]">Tentar novamente</button></div></div>
+              ) : q.isPending ? (
+                <div className="grid grid-cols-3 gap-x-[34px] gap-y-[60px]">{Array.from({ length: 9 }, (_, i) => <Skeleton key={i} />)}</div>
+              ) : items?.length === 0 ? (
+                <div role="status" className="grid h-[300px] place-items-center bg-[#221612]">Nenhum NFT encontrado para esses filtros.</div>
+              ) : (
+                <div className="grid grid-cols-3 gap-x-[34px] gap-y-[60px]">{items?.map((n) => <Card key={n.id} nft={n} />)}</div>
+              )}
+              {q.data && q.data.totalPages > 1 && (
+                <nav aria-label="PaginaÃ§Ã£o" className="mt-14 flex justify-end gap-2">
+                  {Array.from({ length: q.data.totalPages }, (_, i) => i + 1).map((p) => <button key={p} aria-current={p === page ? 'page' : undefined} onClick={() => navigate({ search: (x) => ({ ...x, page: p }) })} className={`size-[35px] rounded-md border border-[#3b2a20] text-sm ${p === page ? 'border-[#d18a4e] bg-[#d18a4e] font-bold text-[#140d0b]' : ''}`}>{p}</button>)}
+                  <button aria-label="PrÃ³xima pÃ¡gina" disabled={page >= q.data.totalPages} onClick={() => navigate({ search: (x) => ({ ...x, page: page + 1 }) })} className="grid size-[35px] place-items-center rounded-md border border-[#3b2a20]"><ChevronRight size={16} /></button>
+                </nav>
+              )}
+            </section>
+          </div>
+
+          <section className="mt-24 grid grid-cols-2 gap-[30px]">
+            {BANNERS.map((b, i) => (
+              <div key={i} className="flex h-[250px] overflow-hidden rounded-xl bg-[#221612]">
+                {art(items, b.art, i) ? <img src={art(items, b.art, i)} alt="" width={288} height={250} loading="lazy" className="h-full w-[288px] object-cover" /> : <div className="skeleton h-full w-[288px]" />}
+                <div className="flex flex-1 flex-col items-end justify-start pr-[30px] pt-[37px] text-right"><h2 className="text-lg font-bold leading-6">{b.title[0]}<br />{b.title[1]}</h2><p className="mb-3.5 mt-3.5 max-w-[262px] text-sm leading-6 text-[#b8946a]">{b.text}</p><a href="#catalogo" className="inline-flex h-[38px] items-center gap-1 rounded bg-[#d18a4e] px-6 text-sm font-bold text-[#140d0b]">Explorar<ArrowRight size={16} /></a></div>
+              </div>))}
+          </section>
+
+          <section className="mt-[70px] text-center">
+            <h2 className="text-[28px] font-bold">{BLOG.title}</h2><p className="mt-3 text-[15px] text-[#b8946a]">{BLOG.subtitle}</p>
+            <div className="mt-9 flex gap-6 text-left">{BLOG.posts.map((p) => (
+              <article key={p.title} className="w-[268px] overflow-hidden rounded-lg bg-[#221612]">
+                {art(items, p.art) ? <img src={art(items, p.art)} alt="" width={268} height={195} loading="lazy" className="h-[195px] w-full object-cover object-top" /> : <div className="skeleton h-[195px]" />}
+                <div className="p-4"><p className="text-xs leading-4 text-[#b8946a]">{p.date} | Leitura de {p.read}</p><h3 className="mt-2.5 text-base font-bold leading-[21px]">{p.title}</h3><p className="mt-2 text-xs leading-4 text-[#b8946a]">{p.text}</p><a href="#catalogo" className={`mt-3 inline-block text-xs font-bold ${accent}`}>Ler mais â†’</a></div>
+              </article>))}</div>
+          </section>
+        </div>
+      </main>
+      <div className="hidden md:block"><SiteFooter /></div>
+    </div>
+  )
+}
+
+===== .\src\features\home\skeleton.css =====
+.skeleton{background:linear-gradient(90deg,#221612 25%,#33231b 50%,#221612 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skeleton{animation:none}}
+
+===== .\src\features\nft\NftDetailPage.tsx =====
+import '@/features/home/skeleton.css'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Link, getRouteApi } from '@tanstack/react-router'
+import { ChevronLeft, Heart, Mail, Minus, Plus, Search, ShoppingCart, Star } from 'lucide-react'
+import { useState } from 'react'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { nftsQuery } from '@/features/catalog/queries'
+import type { Nft } from '@/shared/api/types'
+import { nftQueryOptions } from './queries'
+
+const route = getRouteApi('/nft/$nftId')
+const NET: Record<string, string> = { ethereum: 'Ethereum', polygon: 'Polygon', solana: 'Solana' }
+const accent = 'text-[#e89b55]'
+// Carrinho e favoritos ainda nÃ£o existem: avisa na regiÃ£o aria-live em vez de simular sucesso.
+const notYet = (what: string) => { const el = document.getElementById('live'); if (el) el.textContent = `${what} estarÃ¡ disponÃ­vel quando o carrinho e os favoritos forem implementados.` }
+
+function MiniCard({ n }: { n: Nft }) {
+  return (
+    <Link to="/nft/$nftId" params={{ nftId: n.id }} className="block w-[220px] shrink-0">
+      <div className="grid h-[255px] place-items-center bg-[#221612]"><img src={n.thumbnail} alt={n.title} width={200} height={200} loading="lazy" className="size-[200px] rounded-[14px] object-contain" /></div>
+      <p className="mt-2.5 text-[15px]">{n.title}</p><p className={`text-[15px] font-bold ${accent}`}>{n.priceEth} ETH</p>
+    </Link>
+  )
+}
+
+function Qty({ qty, setQty, max, size }: { qty: number; setQty: (n: number) => void; max: number; size: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <button aria-label="Diminuir quantidade" disabled={qty <= 1} onClick={() => setQty(qty - 1)} className={`grid place-items-center rounded-full bg-[#d18a4e] text-[#140d0b] disabled:opacity-40 ${size}`}><Minus size={14} /></button>
+      <span aria-live="polite" className="min-w-4 text-center">{qty}</span>
+      <button aria-label="Aumentar quantidade" disabled={qty >= max} onClick={() => setQty(qty + 1)} className={`grid place-items-center rounded-full bg-[#d18a4e] text-[#140d0b] disabled:opacity-40 ${size}`}><Plus size={14} /></button>
+    </div>
+  )
+}
+
+function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
+  const first = nft.editions.find((e) => e.name === '1/50' && e.available > 0) ?? nft.editions.find((e) => e.available > 0) ?? nft.editions[0]
+  const [edId, setEdId] = useState(first?.id), [qty, setQty] = useState(1), [img, setImg] = useState(0), [tab, setTab] = useState<'d' | 'r'>('d'), [dot, setDot] = useState(0)
+  const ed = nft.editions.find((e) => e.id === edId) ?? nft.editions[0]
+  const max = ed?.available ?? 0, soldOut = max === 0, price = ed?.priceEth ?? nft.priceEth, net = NET[nft.network] ?? nft.network
+  const dots = Math.min(3, Math.max(1, others.length - 4))
+  const pick = (id: string) => { setEdId(id); setQty(1) }
+  const short = `Um colecionÃ¡vel digital finalizado Ã  mÃ£o da coleÃ§Ã£o Kurio Editions, verificado na ${net}, com arte desbloqueÃ¡vel e acesso para colecionadores.`
+  const chips = (cls: string) => (
+    <div className={`flex flex-wrap gap-2 ${cls}`} role="radiogroup" aria-label="EdiÃ§Ã£o">
+      {nft.editions.map((e) => (
+        <button key={e.id} role="radio" aria-checked={e.id === ed?.id} disabled={e.available === 0} onClick={() => pick(e.id)}
+          className={`rounded-full border px-2.5 py-0.5 text-xs disabled:line-through disabled:opacity-50 md:h-6 max-md:px-3 max-md:py-1.5 max-md:text-[15px] ${e.id === ed?.id ? 'border-[#d18a4e] text-[#f3ece3]' : 'border-[#4a3326] bg-[#221612] text-[#f3ece3]'}`}>{e.name}</button>
+      ))}
+    </div>
+  )
+  const status = soldOut && <p role="status" className="text-xs text-[#e89b55]">EdiÃ§Ã£o esgotada. Escolha outra ediÃ§Ã£o.</p>
+  const meta = [`ID do token: ${nft.tokenId}`, `ColeÃ§Ã£o: ${nft.collection}`, `Atributos: ${nft.attributes.join(', ')}`]
+
+  return (
+    <>
+      {/* MOBILE */}
+      <div className="pb-[190px] md:hidden">
+        <div className="relative px-[26px] pt-[22px]">
+          <Link to="/" aria-label="Voltar" className="absolute left-[27px] top-[22px] z-10 grid size-8 place-items-center rounded-full bg-[#221612]/80 text-[#d18a4e]"><ChevronLeft size={18} /></Link>
+          <button aria-label="Favoritar" onClick={() => notYet('Favoritar')} className="absolute right-[27px] top-[22px] z-10 grid size-8 place-items-center rounded-full bg-[#221612]/80 text-[#d18a4e]"><Heart size={16} /></button>
+          <img src={nft.images[0]} alt={nft.title} width={340} height={308} className="mt-10 h-[308px] w-full rounded-t-3xl object-cover" />
+        </div>
+        <section className="-mt-1 rounded-t-[32px] bg-[#221612] px-[23px] pb-8 pt-6">
+          <div className="flex items-start justify-between gap-3"><h1 className="text-[19px] font-bold">{nft.title}</h1>
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#d18a4e] px-2 py-0.5 text-sm"><Star size={12} className="fill-[#e89b55] text-[#e89b55]" />{nft.rating.toFixed(1)}<span className="text-[#b8946a]">({nft.reviewCount})</span></span></div>
+          <p className="mt-3 text-[13px] leading-[22px] text-[#b8946a]">{`Um colecionÃ¡vel digital ${ed?.name ?? ''} finalizado Ã  mÃ£o da coleÃ§Ã£o Kurio Editions, verificado na ${net}.`}</p>
+          <p className="mt-3 text-[15px] font-bold">EdiÃ§Ã£o:</p>{chips('mt-2')}
+          <ul className="mt-4 space-y-1.5 text-[15px] text-[#b8946a]">{meta.map((m) => <li key={m}>{m}</li>)}</ul>
+        </section>
+        <div className="fixed inset-x-0 bottom-0 z-20 rounded-t-[32px] bg-[#2a1c15] px-[22px] pb-5 pt-5">
+          <div className="flex items-center justify-between"><div className="flex items-center gap-3 text-[15px]">Qtd.<Qty qty={qty} setQty={setQty} max={max} size="size-6" /></div><p className={`text-2xl font-bold ${accent}`}>{price} ETH</p></div>
+          {status}
+          <div className="mt-4 flex gap-4"><button aria-disabled={soldOut} onClick={() => (soldOut ? undefined : notYet('Comprar'))} className="h-14 w-[185px] rounded-full bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-base font-bold text-[#140d0b] aria-disabled:opacity-50">Comprar NFT</button>
+            <button aria-label="Adicionar ao carrinho" onClick={() => notYet('Adicionar ao carrinho')} className="grid size-14 place-items-center rounded-full bg-[#221612] text-[#b8946a]"><ShoppingCart size={20} /></button></div>
+        </div>
+      </div>
+
+      {/* DESKTOP */}
+      <div className="hidden md:block">
+        <nav aria-label="Trilha" className="mt-[30px] text-sm font-bold"><Link to="/">InÃ­cio</Link> / <span>Mercado</span></nav>
+        <section className="mt-[19px] grid grid-cols-[100px_442px_1fr] gap-x-[29px]">
+          <div className="flex flex-col gap-4">{nft.images.slice(0, 4).map((_, i) => (
+            <button key={i} aria-label={`Imagem ${i + 1}`} aria-current={i === img} onClick={() => setImg(i)} className={`size-[100px] overflow-hidden rounded-xl border ${i === img ? 'border-[#d18a4e]' : 'border-transparent'}`}><img src={nft.thumbnail} alt="" width={100} height={100} className="size-full object-cover" /></button>))}</div>
+          <div className="relative h-[443px] bg-[#221612] p-5"><img src={nft.images[img]} alt={nft.title} width={402} height={403} className="size-[403px] rounded-2xl object-cover" /><span aria-hidden className="absolute right-8 top-8 text-[#140d0b]"><Search size={18} /></span></div>
+          <div className="ml-[6px]">
+            <h1 className="text-[28px] font-bold leading-9">{nft.title}</h1>
+            <div className="mt-1 flex items-center justify-between border-b border-[#3b2a20] pb-2"><p className={`text-[22px] font-bold ${accent}`}>{price} ETH</p>
+              <p className="flex items-center gap-1 text-xs"><span className="flex">{[0, 1, 2, 3, 4].map((i) => <Star key={i} size={11} className="fill-[#e89b55] text-[#e89b55]" />)}</span> {nft.reviewCount} avaliaÃ§Ãµes de colecionadores</p></div>
+            <p className="mt-4 text-sm font-bold">Sobre este NFT:</p><p className="mt-2 text-[13px] leading-6 text-[#b8946a]">{short}</p>
+            <p className="mt-3 text-sm font-bold">EdiÃ§Ã£o:</p>{chips('mt-2')}
+            <div className="mt-4 flex items-center justify-between"><Qty qty={qty} setQty={setQty} max={max} size="size-8" />
+              <div className="flex gap-2"><button aria-disabled={soldOut} onClick={() => (soldOut ? undefined : notYet('Comprar'))} className="h-10 w-[131px] rounded bg-[#d18a4e] text-xs font-bold text-[#140d0b] aria-disabled:opacity-50">COMPRAR</button>
+                <button onClick={() => notYet('Favoritar')} className="flex h-10 w-[134px] items-center justify-center gap-1.5 rounded border border-[#d18a4e] text-xs text-[#e89b55]"><Heart size={14} />Favoritar</button></div></div>
+            <div className="mt-1">{status}</div>
+            <ul className="mt-3 text-[13px] leading-8 text-[#b8946a]">{meta.map((m) => <li key={m}>{m}</li>)}</ul>
+            <p className="mt-1 flex items-center gap-2 text-[13px] font-bold">Compartilhar este NFT: <span aria-hidden className="text-xs">in</span><Mail size={13} aria-hidden /><span aria-hidden className="text-xs">t</span></p>
+          </div>
+        </section>
+        <section className="mt-[42px]">
+          <div role="tablist" className="flex gap-8 border-b border-[#3b2a20] text-base">
+            <button role="tab" aria-selected={tab === 'd'} onClick={() => setTab('d')} className={`pb-2 ${tab === 'd' ? `border-b-2 border-[#d18a4e] ${accent}` : ''}`}>Detalhes do NFT</button>
+            <button role="tab" aria-selected={tab === 'r'} onClick={() => setTab('r')} className={`pb-2 ${tab === 'r' ? `border-b-2 border-[#d18a4e] ${accent}` : ''}`}>AvaliaÃ§Ãµes de colecionadores ({nft.reviewCount})</button></div>
+          <div role="tabpanel" className="mt-4 text-sm leading-6 text-[#b8946a]">
+            {tab === 'd' ? (<>
+              <p>{nft.title} Ã© uma obra digital {ed?.name} finalizada Ã  mÃ£o da coleÃ§Ã£o Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na {net}. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.</p>
+              <p className="mt-6">A propriedade inclui a arte em alta resoluÃ§Ã£o, lanÃ§amentos exclusivos para colecionadores e um registro permanente de procedÃªncia registrada na rede. {nft.creator} recebe 5% de direitos autorais nas vendas secundÃ¡rias, apoiando novos trabalhos e lanÃ§amentos da comunidade.</p>
+              <p className="mt-4 font-bold text-[#f3ece3]">Rede:</p><p>Cunhado na {net} com procedÃªncia imutÃ¡vel e metadados armazenados no IPFS.</p>
+              <p className="mt-4 font-bold text-[#f3ece3]">Contrato:</p><p>Direitos autorais do criador: 5% nas vendas secundÃ¡rias, pagos automaticamente pelos mercados compatÃ­veis.</p>
+              <p className="mt-4 font-bold text-[#f3ece3]">Direitos autorais:</p><p>0x7A42...19E8 â€¢ Contrato inteligente ERC-721 verificado.</p></>
+            ) : <p>Nota {nft.rating.toFixed(1)} de 5, com base em {nft.reviewCount} avaliaÃ§Ãµes de colecionadores.</p>}
+          </div>
+        </section>
+        {others.length > 0 && (
+          <section className="mt-[60px]" aria-labelledby="more-h">
+            <h2 id="more-h" className={`border-b border-[#3b2a20] pb-2 text-base font-bold ${accent}`}>Mais desta coleÃ§Ã£o</h2>
+            <div className="mt-5 flex gap-[25px]">{others.slice(dot, dot + 5).map((n) => <MiniCard key={n.id} n={n} />)}</div>
+            <div className="mt-6 flex justify-center gap-2">{Array.from({ length: dots }, (_, i) => <button key={i} aria-label={`PÃ¡gina ${i + 1}`} aria-current={i === dot} onClick={() => setDot(i)} className={`size-2.5 rounded-full border border-[#d18a4e] ${i === dot ? 'bg-[#d18a4e]' : ''}`} />)}</div>
+          </section>)}
+      </div>
+    </>
+  )
+}
+
+export function NftDetailPage() {
+  const { nftId } = route.useParams()
+  const q = useQuery(nftQueryOptions(nftId))
+  const more = useQuery({ ...nftsQuery({ pageSize: 9, sort: 'newest' }), placeholderData: keepPreviousData })
+  const err = q.error as { code?: string } | null
+  return (
+    <div className="min-h-screen bg-[#140d0b] font-mono text-[#f3ece3]">
+      <SiteHeader active="Mercado" />
+      <main className="mx-auto w-full max-w-[1200px]">
+        {q.isPending ? (
+          <div aria-busy className="px-[26px] pt-10 md:px-0 md:pt-[79px] md:grid md:grid-cols-[100px_442px_1fr] md:gap-x-[29px]"><div className="hidden md:block" /><div className="skeleton h-[308px] md:h-[443px]" /><div className="skeleton mt-6 h-[300px] md:ml-[6px] md:mt-0" /></div>
+        ) : q.isError ? (
+          <div role="alert" className="grid min-h-[50vh] place-items-center px-6 text-center"><div>
+            <p>{err?.code === 'NFT_NOT_FOUND' ? 'NFT nÃ£o encontrado.' : 'NÃ£o foi possÃ­vel carregar este NFT.'}</p>
+            {err?.code !== 'NFT_NOT_FOUND' && <button onClick={() => q.refetch()} className="mt-3 rounded bg-[#d18a4e] px-4 py-2 font-bold text-[#140d0b]">Tentar novamente</button>}
+            <Link to="/" className="mt-3 block text-[#e89b55] underline">Voltar ao inÃ­cio</Link></div></div>
+        ) : (
+          <Detail key={q.data.id} nft={q.data} others={(more.data?.items ?? []).filter((n) => n.id !== q.data.id)} />
+        )}
+      </main>
+      <div className="hidden md:block"><SiteFooter /></div>
+    </div>
+  )
+}
+
+===== .\src\mocks\fixtures\nfts.ts =====
+import Decimal from 'decimal.js'
+import { NETWORKS, type Edition, type EditionName, type Network, type Nft } from '@/shared/api/types'
+
+// Todo dado fictÃ­cio vive em mocks/. Sem Math.random: tudo derivado do Ã­ndice.
+
+export const CATEGORIES = [
+  { slug: 'arte-digital', label: 'Arte digital' },
+  { slug: 'fotografia', label: 'Fotografia' },
+  { slug: 'musica', label: 'MÃºsica' },
+  { slug: 'arte-3d', label: 'Arte 3D' },
+  { slug: 'colecionaveis', label: 'ColecionÃ¡veis' },
+  { slug: 'generativa', label: 'Generativa' },
+  { slug: 'jogos', label: 'Jogos' },
+  { slug: 'assinaturas', label: 'Assinaturas' },
+  { slug: 'utilidade', label: 'Utilidade' },
+] as const
+
+export type ArtKey = 'emerald-ape' | 'violet-nomad' | 'ivory-baron' | 'golden-beat'
+
+// Chaves (e nÃ£o URLs) vÃ£o para o db: URL com hash muda a cada build e quebraria o localStorage antigo.
+// Os literais em new URL(...) sÃ£o o que o Vite precisa para empacotar cada arquivo.
+const ART: Record<ArtKey, { full: string; thumb: string }> = {
+  'emerald-ape': {
+    full: new URL('../../assets/nfts/emerald-ape-800.webp', import.meta.url).href,
+    thumb: new URL('../../assets/nfts/emerald-ape-400.webp', import.meta.url).href,
+  },
+  'violet-nomad': {
+    full: new URL('../../assets/nfts/violet-nomad-800.webp', import.meta.url).href,
+    thumb: new URL('../../assets/nfts/violet-nomad-400.webp', import.meta.url).href,
+  },
+  'ivory-baron': {
+    full: new URL('../../assets/nfts/ivory-baron-800.webp', import.meta.url).href,
+    thumb: new URL('../../assets/nfts/ivory-baron-400.webp', import.meta.url).href,
+  },
+  'golden-beat': {
+    full: new URL('../../assets/nfts/golden-beat-800.webp', import.meta.url).href,
+    thumb: new URL('../../assets/nfts/golden-beat-400.webp', import.meta.url).href,
+  },
+}
+
+export type NftRecord = Omit<Nft, 'images' | 'thumbnail'> & { art: ArtKey; popularity: number }
+
+export function toNft(r: NftRecord): Nft {
+  const { art, popularity: _popularity, ...rest } = r
+  const { full, thumb } = ART[art]
+  return { ...rest, images: [full, full, full, full], thumbnail: thumb }
+}
+
+const ARTS: ArtKey[] = ['emerald-ape', 'violet-nomad', 'ivory-baron', 'golden-beat']
+const COLLECTION: Record<ArtKey, string> = {
+  'emerald-ape': 'Kurio Apes', 'violet-nomad': 'Kurio Nomads', 'ivory-baron': 'Kurio Barons', 'golden-beat': 'Kurio Beats',
+}
+const ATTRS: Record<ArtKey, string[]> = {
+  'emerald-ape': ['Ã“culos', 'Esmeralda', 'Raro'],
+  'violet-nomad': ['ChapÃ©u', 'Moletom', 'Roxo'],
+  'ivory-baron': ['Terno', 'Marfim', 'Gola alta'],
+  'golden-beat': ['Fones', 'Dourado', 'Jaqueta'],
+}
+const CREATORS = ['Nova Sato', 'Rafa Lima', 'Ayo Bell', 'Mika Duarte']
+const ADJ = ['Emerald', 'Sage', 'Neon', 'Cosmic', 'Violet', 'Ivory', 'Golden', 'Crimson', 'Amber', 'Lunar', 'Solar', 'Onyx']
+const NOUN = ['Ape', 'Nomad', 'Vessel', 'Bloom', 'Baron', 'Beat', 'Frequency', 'Signal', 'Oracle', 'Drifter', 'Echo', 'Relic']
+const PRICES = ['0.39', '0.59', '0.99', '1.19', '1.29', '1.39', '1.69', '1.79', '1.99', '2.49', '3.20', '4.75', '6.10', '12.30']
+
+interface Seed {
+  title: string; number: number; art: ArtKey; price: string
+  category: string; network: Network; badge?: 'RARO'; compareAt?: string
+}
+
+// Os 9 primeiros espelham os cards do Figma (nome, preÃ§o, arte).
+const FIGMA: Seed[] = [
+  { title: 'Emerald Ape #042', number: 42, art: 'emerald-ape', price: '1.19', category: 'arte-digital', network: 'ethereum' },
+  { title: 'Sage Nomad #009', number: 9, art: 'violet-nomad', price: '1.69', category: 'fotografia', network: 'ethereum' },
+  { title: 'Neon Vessel #552', number: 552, art: 'ivory-baron', price: '1.99', category: 'arte-3d', network: 'polygon', badge: 'RARO', compareAt: '2.29' },
+  { title: 'Cosmic Bloom #118', number: 118, art: 'violet-nomad', price: '1.29', category: 'generativa', network: 'solana' },
+  { title: 'Violet Nomad #314', number: 314, art: 'violet-nomad', price: '1.39', category: 'colecionaveis', network: 'ethereum' },
+  { title: 'Ivory Baron #088', number: 88, art: 'ivory-baron', price: '1.79', category: 'arte-digital', network: 'polygon' },
+  { title: 'Golden Beat #207', number: 207, art: 'golden-beat', price: '0.99', category: 'musica', network: 'ethereum' },
+  { title: 'Golden Frequency #071', number: 71, art: 'golden-beat', price: '0.59', category: 'musica', network: 'solana' },
+  { title: 'Golden Signal #160', number: 160, art: 'golden-beat', price: '0.39', category: 'jogos', network: 'polygon' },
+]
+
+function generated(i: number): Seed {
+  const number = ((i * 37 + 11) % 900) + 1
+  const price = PRICES[(i * 3 + 1) % PRICES.length]!
+  return {
+    title: `${ADJ[(i * 5 + 3) % ADJ.length]} ${NOUN[(i * 7 + 1) % NOUN.length]} #${String(number).padStart(3, '0')}`,
+    number,
+    art: ARTS[i % ARTS.length]!,
+    price,
+    category: CATEGORIES[(i * 5 + 2) % CATEGORIES.length]!.slug,
+    network: NETWORKS[(i * 7) % NETWORKS.length]!,
+    badge: i % 9 === 2 ? 'RARO' : undefined,
+    compareAt: i % 13 === 5 ? new Decimal(price).plus('0.30').toFixed() : undefined,
+  }
+}
+
+const SEEDS: Seed[] = [...FIGMA, ...Array.from({ length: 39 }, (_, i) => generated(i))]
+
+function editionsFor(i: number, price: string, soldOut: boolean): Edition[] {
+  const stock: [EditionName, number][] = [
+    ['1/1', i % 5 === 0 ? 0 : 1],
+    ['1/10', i % 7 === 0 ? 0 : ((i * 3) % 10) + 1],
+    ['1/50', ((i * 7) % 50) + 1],
+    ['ABERTA', ((i * 11) % 99) + 1],
+  ]
+  return stock.map(([name, available], j) => ({
+    id: `ed-${i + 1}-${j + 1}`, name, priceEth: price, available: soldOut ? 0 : available,
+  }))
+}
+
+export function buildNftRecords(): NftRecord[] {
+  return SEEDS.map((s, i) => {
+    const soldOut = i >= FIGMA.length && (i - FIGMA.length) % 11 === 4
+    const fromFigma = i < FIGMA.length
+    return {
+      id: `nft-${i + 1}`,
+      title: s.title,
+      collection: COLLECTION[s.art],
+      creator: CREATORS[i % CREATORS.length]!,
+      category: s.category,
+      description: `${s.title} Ã© uma obra digital finalizada Ã  mÃ£o da coleÃ§Ã£o ${COLLECTION[s.art]}, verificada na rede ${s.network}.`,
+      priceEth: s.price,
+      compareAtPriceEth: s.compareAt,
+      badge: s.badge,
+      network: s.network,
+      tokenId: `#${String(s.number).padStart(4, '0')}`,
+      attributes: ATTRS[s.art],
+      rating: i === 0 ? 4.8 : 4 + ((i * 3) % 10) / 10,
+      reviewCount: i === 0 ? 19 : ((i * 5) % 40) + 3,
+      editions: editionsFor(i, s.price, soldOut),
+      version: 1,
+      // mais recentes primeiro: um item por hora, a partir de uma data fixa
+      updatedAt: new Date(Date.UTC(2026, 10, 1, 12) - i * 3_600_000).toISOString(),
+      art: s.art,
+      popularity: fromFigma ? 90 - i : (i * 53) % 100,
+    }
+  })
+}
+
+===== .\src\mocks\handlers\nfts.ts =====
+import { HttpResponse, http } from 'msw'
+import { apiError, prelude } from '../http-utils'
+import { QueryError, getFacets, getNft, listNfts, parseNftQuery } from '../services/nfts'
+
+// O prefixo "*" faz o mesmo handler valer no navegador e nos testes em Node.
+// "facets" vem antes de ":id", senÃ£o o :id engoliria a rota.
+export const nftsHandlers = [
+  http.get('*/api/nfts/facets', async () => {
+    const { scenario, failure } = await prelude()
+    return failure ?? HttpResponse.json(getFacets(scenario))
+  }),
+
+  http.get('*/api/nfts/:id', async ({ params }) => {
+    const { scenario, failure } = await prelude()
+    if (failure) return failure
+    const nft = getNft(String(params.id), scenario)
+    return nft ? HttpResponse.json(nft) : HttpResponse.json(apiError('NFT_NOT_FOUND', 'NFT nÃ£o encontrado.'), { status: 404 })
+  }),
+
+  http.get('*/api/nfts', async ({ request }) => {
+    const { scenario, failure } = await prelude()
+    if (failure) return failure
+    try {
+      const query = parseNftQuery(new URL(request.url).searchParams)
+      return HttpResponse.json(listNfts(query, scenario))
+    } catch (e) {
+      if (e instanceof QueryError) {
+        return HttpResponse.json(apiError('VALIDATION_ERROR', e.message, e.fields), { status: 422 })
+      }
+      throw e
+    }
+  }),
+]
+
+===== .\src\mocks\services\nfts.ts =====
+import Decimal from 'decimal.js'
+import type { Nft, NftFacets, NftQuery, Network, Page } from '@/shared/api/types'
+import { NETWORKS } from '@/shared/api/types'
+import { getDb } from '../db'
+import { CATEGORIES, toNft, type NftRecord } from '../fixtures/nfts'
+import type { Scenario } from '../scenarios'
+
+const DEFAULT_PAGE_SIZE = 12 // 48 NFTs = 4 pÃ¡ginas, como no Figma
+const MAX_PAGE_SIZE = 48
+
+export class QueryError extends Error {
+  fields: Record<string, string>
+  constructor(fields: Record<string, string>) {
+    super('ParÃ¢metros invÃ¡lidos')
+    this.fields = fields
+  }
+}
+
+const strip = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+
+// Axios envia arrays como category[]=a; aceitamos as duas formas.
+function all(sp: URLSearchParams, key: string): string[] {
+  return [...sp.getAll(key), ...sp.getAll(`${key}[]`)].filter(Boolean)
+}
+
+function decimalParam(sp: URLSearchParams, key: string, fields: Record<string, string>): Decimal | null {
+  const raw = sp.get(key)
+  if (raw === null || raw === '') return null
+  try { return new Decimal(raw) } catch { fields[key] = 'Valor decimal invÃ¡lido'; return null }
+}
+
+export function parseNftQuery(sp: URLSearchParams): NftQuery {
+  const fields: Record<string, string> = {}
+  const page = sp.get('page') === null ? 1 : Number(sp.get('page'))
+  const pageSize = sp.get('pageSize') === null ? DEFAULT_PAGE_SIZE : Number(sp.get('pageSize'))
+  if (!Number.isInteger(page) || page < 1) fields.page = 'PÃ¡gina invÃ¡lida'
+  if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > MAX_PAGE_SIZE) fields.pageSize = `Use de 1 a ${MAX_PAGE_SIZE}`
+  const sort = sp.get('sort') ?? 'newest'
+  if (!['newest', 'price_asc', 'price_desc', 'popular'].includes(sort)) fields.sort = 'OrdenaÃ§Ã£o invÃ¡lida'
+  const network = all(sp, 'network')
+  if (network.some((n) => !(NETWORKS as readonly string[]).includes(n))) fields.network = 'Rede invÃ¡lida'
+  decimalParam(sp, 'minPrice', fields)
+  decimalParam(sp, 'maxPrice', fields)
+  if (Object.keys(fields).length) throw new QueryError(fields)
+  return {
+    q: sp.get('q') ?? undefined,
+    category: all(sp, 'category'),
+    network: network as Network[],
+    minPrice: sp.get('minPrice') || undefined,
+    maxPrice: sp.get('maxPrice') || undefined,
+    sort: sort as NftQuery['sort'],
+    page,
+    pageSize,
+  }
+}
+
+function present(r: NftRecord, scenario: Scenario): Nft {
+  const nft = toNft(r)
+  if (scenario !== 'soldout') return nft
+  return { ...nft, editions: nft.editions.map((e) => ({ ...e, available: 0 })) }
+}
+
+export function listNfts(query: NftQuery, scenario: Scenario): Page<Nft> {
+  const page = query.page ?? 1
+  const pageSize = query.pageSize ?? DEFAULT_PAGE_SIZE
+  if (scenario === 'empty') return { items: [], page, pageSize, total: 0, totalPages: 0 }
+
+  const q = query.q ? strip(query.q.trim()) : ''
+  const min = query.minPrice ? new Decimal(query.minPrice) : null
+  const max = query.maxPrice ? new Decimal(query.maxPrice) : null
+  const cats = query.category ?? []
+  const nets = query.network ?? []
+
+  const rows = getDb().nfts.filter((r) => {
+    if (q && !strip(`${r.title} ${r.collection} ${r.creator}`).includes(q)) return false
+    if (cats.length && !cats.includes(r.category)) return false
+    if (nets.length && !nets.includes(r.network)) return false
+    if (min && new Decimal(r.priceEth).lt(min)) return false
+    if (max && new Decimal(r.priceEth).gt(max)) return false
+    return true
+  })
+
+  // desempate por id: a ordem Ã© sempre a mesma para a mesma consulta
+  const byId = (a: NftRecord, b: NftRecord) => a.id.localeCompare(b.id, 'en', { numeric: true })
+  const sorters: Record<NonNullable<NftQuery['sort']>, (a: NftRecord, b: NftRecord) => number> = {
+    newest: (a, b) => b.updatedAt.localeCompare(a.updatedAt) || byId(a, b),
+    price_asc: (a, b) => new Decimal(a.priceEth).cmp(b.priceEth) || byId(a, b),
+    price_desc: (a, b) => new Decimal(b.priceEth).cmp(a.priceEth) || byId(a, b),
+    popular: (a, b) => b.popularity - a.popularity || byId(a, b),
+  }
+  rows.sort(sorters[query.sort ?? 'newest'])
+
+  const total = rows.length
+  const start = (page - 1) * pageSize
+  return {
+    items: rows.slice(start, start + pageSize).map((r) => present(r, scenario)),
+    page, pageSize, total, totalPages: Math.ceil(total / pageSize),
+  }
+}
+
+export function getNft(id: string, scenario: Scenario): Nft | null {
+  const r = getDb().nfts.find((n) => n.id === id)
+  return r ? present(r, scenario) : null
+}
+
+export function getFacets(scenario: Scenario): NftFacets {
+  const rows = scenario === 'empty' ? [] : getDb().nfts
+  const prices = rows.map((r) => new Decimal(r.priceEth))
+  return {
+    categories: CATEGORIES.map((c) => ({ slug: c.slug, label: c.label, count: rows.filter((r) => r.category === c.slug).length })),
+    networks: NETWORKS.map((n) => ({ network: n, count: rows.filter((r) => r.network === n).length })),
+    priceRange: prices.length
+      ? { min: Decimal.min(...prices).toFixed(), max: Decimal.max(...prices).toFixed() }
+      : { min: '0', max: '0' },
+  }
+}
+
+===== .\src\shared\components\SiteFooter.tsx =====
+import { Link } from '@tanstack/react-router'
+import { CATEGORIES } from '@/features/catalog/constants'
+
+const FEATURES = [
+  {
+    icon: 'W',
+    title: 'SeguranÃ§a da carteira',
+    text: 'Proteja sua carteira e colecione arte digital verificada com confianÃ§a.',
+  },
+  {
+    icon: 'C',
+    title: 'Criadores em destaque',
+    text: 'ConheÃ§a artistas, estÃºdios e comunidades que moldam a cultura digital na rede.',
+  },
+  {
+    icon: 'D',
+    title: 'Alertas de lanÃ§amentos',
+    text: 'Receba calendÃ¡rios de cunhagem, novidades de listas de acesso e anÃ¡lises do mercado.',
+  },
+]
+
+const PROFILE_ITEMS = ['Meu perfil', 'Minha coleÃ§Ã£o', 'Atividade', 'EstÃºdio do criador', 'Lista de interesse']
+const HELP_ITEMS = ['Central de ajuda', 'Como comprar NFTs', 'Carteira e seguranÃ§a', 'PolÃ­tica do mercado', 'Denunciar item']
+
+function PlainList({ title, items }: { title: string; items: readonly string[] }) {
+  return (
+    <div>
+      <h2 className="mb-3 text-base font-bold">{title}</h2>
+      <ul className="space-y-2 text-muted-foreground">
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export function SiteFooter() {
+  return (
+    <footer className="mt-16">
+      <div className="mx-auto w-full max-w-[1200px] px-4 md:px-6 xl:px-0">
+        <div className="grid gap-8 bg-card p-6 md:grid-cols-2 lg:grid-cols-4 lg:p-8">
+          {FEATURES.map((f) => (
+            <div key={f.title}>
+              <span
+                aria-hidden="true"
+                className="mb-3 flex size-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground"
+              >
+                {f.icon}
+              </span>
+              <h2 className="mb-2 text-base font-bold">{f.title}</h2>
+              <p className="text-muted-foreground">{f.text}</p>
+            </div>
+          ))}
+          <div>
+            <h2 className="mb-3 text-base font-bold">Antecipe-se ao prÃ³ximo lanÃ§amento</h2>
+            {/* Newsletter estÃ¡ fora do escopo: desabilitada para nÃ£o simular sucesso. */}
+            <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
+              <label htmlFor="newsletter" className="sr-only">
+                E-mail para novidades
+              </label>
+              <input
+                id="newsletter"
+                type="email"
+                disabled
+                placeholder="digite seu e-mail..."
+                className="min-w-0 flex-1 rounded-md border border-input bg-background px-3 py-2 disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled
+                title="Em breve"
+                className="rounded-md bg-primary px-4 py-2 font-bold text-primary-foreground disabled:opacity-60"
+              >
+                Enviar
+              </button>
+            </form>
+            <p className="mt-3 text-muted-foreground">
+              Receba lanÃ§amentos selecionados, histÃ³rias de criadores e novidades do mercado.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-3 bg-[#3a2314] px-6 py-4 md:grid-cols-4 lg:px-8">
+          <p className="font-bold tracking-[0.2em]">KURIO</p>
+          <p className="md:col-span-1">Feito para colecionadores, criadores e cultura</p>
+          <p>contato@email.com</p>
+          <p>+55 11 4002 8922</p>
+        </div>
+
+        <div className="grid gap-8 bg-card px-6 py-8 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+          <PlainList title="Meu perfil" items={PROFILE_ITEMS} />
+          <PlainList title="Central de ajuda" items={HELP_ITEMS} />
+          <div>
+            <h2 className="mb-3 text-base font-bold">ColeÃ§Ãµes</h2>
+            <ul className="space-y-2">
+              {CATEGORIES.slice(0, 5).map((name) => (
+                <li key={name}>
+                  <Link
+                    to="/"
+                    search={{ category: [name] }}
+                    className="text-muted-foreground hover:text-accent-foreground"
+                  >
+                    {name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="mb-3 text-base font-bold">Carteiras compatÃ­veis</h2>
+            <p className="inline-block rounded-md border border-border px-2 py-1 text-xs text-accent-foreground">
+              METAMASK â€¢ WALLETCONNECT â€¢ COINBASE
+            </p>
+          </div>
+        </div>
+
+        <p className="py-4 text-center text-muted-foreground">Â© 2026 Kurio. Propriedade digital para todos.</p>
+      </div>
+    </footer>
+  )
+}
+
+===== .\src\shared\components\SiteHeader.tsx =====
+import { Link } from '@tanstack/react-router'
+import { CartIcon, LoginIcon } from './icons'
+
+// SeÃ§Ãµes fora do escopo do desafio: nÃ£o sÃ£o links (README seÃ§Ã£o 3).
+const OUT_OF_SCOPE = ['Mercado', 'Criadores', 'Aprenda']
+
+export function SiteHeader() {
+  return (
+    <header className="border-b border-border">
+      <div className="mx-auto flex h-[72px] w-full max-w-[1200px] items-center justify-between gap-4 px-4 md:px-6 xl:px-0">
+        <Link to="/" aria-label="Kurio, pÃ¡gina inicial" className="text-xs font-bold tracking-[0.2em]">
+          KURIO
+        </Link>
+
+        <nav aria-label="Principal" className="hidden md:block">
+          <ul className="flex items-center gap-8">
+            <li>
+              <Link
+                to="/"
+                activeOptions={{ exact: true }}
+                activeProps={{ 'aria-current': 'page', className: 'text-accent-foreground border-b-2 border-primary' }}
+                className="inline-block pb-1"
+              >
+                InÃ­cio
+              </Link>
+            </li>
+            {OUT_OF_SCOPE.map((label) => (
+              <li key={label}>
+                <button
+                  type="button"
+                  disabled
+                  title="Em breve"
+                  className="pb-1 text-foreground/70 disabled:cursor-not-allowed"
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          {/* Rotas /cart e /login entram nas prÃ³ximas fatias; <a> comum atÃ© lÃ¡. */}
+          <a href="/cart" aria-label="Carrinho" className="rounded-md p-2 hover:bg-card">
+            <CartIcon />
+          </a>
+          <a
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 font-bold text-primary-foreground hover:opacity-90"
+          >
+            <LoginIcon />
+            Entrar
+          </a>
+        </div>
+      </div>
+    </header>
+  )
+}
+
+===== LISTA DE src/assets =====
+.\src\assets\hero.png
+.\src\assets\react.svg
+.\src\assets\vite.svg
+.\src\assets\nfts\emerald-ape-400.webp
+.\src\assets\nfts\emerald-ape-800.webp
+.\src\assets\nfts\golden-beat-400.webp
+.\src\assets\nfts\golden-beat-800.webp
+.\src\assets\nfts\ivory-baron-400.webp
+.\src\assets\nfts\ivory-baron-800.webp
+.\src\assets\nfts\violet-nomad-400.webp
+.\src\assets\nfts\violet-nomad-800.webp
+
