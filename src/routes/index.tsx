@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { HomePage } from '@/features/home/HomePage'
+import { homeSearch } from '@/features/home/search'
 
-export const Route = createFileRoute('/')({
-  component: () => <h1 className="p-8 text-2xl font-bold">NFT Marketplace</h1>,
-})
+export const Route = createFileRoute('/')({ validateSearch: homeSearch, component: HomePage })
