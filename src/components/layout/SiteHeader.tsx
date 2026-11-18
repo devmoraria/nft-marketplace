@@ -1,7 +1,12 @@
-import { LogIn, Search, ShoppingCart } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { LogIn, LogOut, Search, ShoppingCart } from 'lucide-react'
+import { useLogout } from '@/features/auth/api'
+import { useSession } from '@/features/auth/session'
 import { CART_BADGE, NAV } from '@/features/home/figma-content'
 
 export function SiteHeader({ active = 'Início' }: { active?: string }) {
+  const session = useSession()
+  const logout = useLogout()
   return (
     <header className="relative mx-auto hidden h-[70px] w-full max-w-[1200px] items-center justify-between border-b border-[#3b2a20] md:flex">
       <a href="/" className="text-[13px] font-bold tracking-[0.12em] text-[#f3ece3]">KURIO</a>
@@ -20,7 +25,14 @@ export function SiteHeader({ active = 'Início' }: { active?: string }) {
           <ShoppingCart size={22} />
           <span className="absolute -right-2 -top-2 grid size-4 place-items-center rounded-full bg-[#d18a4e] text-[9px] font-bold text-[#140d0b]">{CART_BADGE}</span>
         </a>
-        <a href="/login" className="flex h-9 items-center gap-1.5 rounded-md bg-[#d18a4e] px-3 text-sm font-bold text-[#140d0b]"><LogIn size={16} />Entrar</a>
+        {session ? (
+          <div className="flex items-center gap-3">
+            <span data-testid="user-name" className="max-w-[140px] truncate text-sm text-[#f3ece3]">{session.user.name}</span>
+            <button type="button" onClick={() => void logout()} className="flex h-9 items-center gap-1.5 rounded-md border border-[#d18a4e] px-3 text-sm font-bold text-[#e89b55]"><LogOut size={16} />Sair</button>
+          </div>
+        ) : (
+          <Link to="/login" className="flex h-9 items-center gap-1.5 rounded-md bg-[#d18a4e] px-3 text-sm font-bold text-[#140d0b]"><LogIn size={16} />Entrar</Link>
+        )}
       </div>
     </header>
   )

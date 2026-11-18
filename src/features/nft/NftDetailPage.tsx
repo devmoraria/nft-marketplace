@@ -5,6 +5,7 @@ import { ChevronLeft, Heart, Mail, Minus, Plus, Search, ShoppingCart, Star } fro
 import { useState } from 'react'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
+import { useRequireAuth } from '@/features/auth/useRequireAuth'
 import { nftsQuery } from '@/features/catalog/queries'
 import { RELATED_ORDER } from '@/features/home/figma-content'
 import type { Nft } from '@/shared/api/types'
@@ -43,6 +44,7 @@ function Qty({ qty, setQty, max, pill, icon, gap }: { qty: number; setQty: (n: n
 }
 
 function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
+  const requireAuth = useRequireAuth()
   const first = nft.editions.find((e) => e.name === '1/50' && e.available > 0) ?? nft.editions.find((e) => e.available > 0) ?? nft.editions[0]
   const [edId, setEdId] = useState(first?.id), [qty, setQty] = useState(1), [img, setImg] = useState(0), [tab, setTab] = useState<'d' | 'r'>('d'), [dot, setDot] = useState(0)
   const ed = nft.editions.find((e) => e.id === edId) ?? nft.editions[0]
@@ -68,7 +70,7 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
       <div className="flex min-h-dvh flex-col md:hidden">
         <div className="relative px-[23px] pt-[57px]">
           <Link to="/" aria-label="Voltar" className="absolute left-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><ChevronLeft size={16} /></Link>
-          <button type="button" aria-label="Favoritar" onClick={() => notYet('Favoritar')} className="absolute right-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><Heart size={15} /></button>
+          <button type="button" aria-label="Favoritar" onClick={() => requireAuth(() => notYet('Favoritar'))} className="absolute right-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><Heart size={15} /></button>
           <img src={nft.images[0]} alt={nft.title} width={315} height={315} className="aspect-square w-full rounded-2xl object-cover" />
         </div>
         <section className="relative -mt-[29px] flex-1 rounded-t-[28px] bg-[#221612] px-[21px] pb-[200px] pt-7">
@@ -87,8 +89,8 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
           </div>
           {status}
           <div className="mt-[18px] flex items-center gap-3">
-            <button type="button" aria-disabled={soldOut} onClick={() => (soldOut ? undefined : notYet('Comprar'))} className="h-[52px] w-[171px] rounded-full bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-sm font-bold text-[#140d0b] aria-disabled:opacity-50">Comprar NFT</button>
-            <button type="button" aria-label="Adicionar ao carrinho" onClick={() => notYet('Adicionar ao carrinho')} className="grid size-[52px] place-items-center rounded-full border border-[#3b2a20] bg-[#34231b] text-[#cfb18c]"><ShoppingCart size={20} /></button>
+            <button type="button" aria-disabled={soldOut} onClick={() => (soldOut ? undefined : requireAuth(() => notYet('Comprar')))} className="h-[52px] w-[171px] rounded-full bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-sm font-bold text-[#140d0b] aria-disabled:opacity-50">Comprar NFT</button>
+            <button type="button" aria-label="Adicionar ao carrinho" onClick={() => requireAuth(() => notYet('Adicionar ao carrinho'))} className="grid size-[52px] place-items-center rounded-full border border-[#3b2a20] bg-[#34231b] text-[#cfb18c]"><ShoppingCart size={20} /></button>
           </div>
         </div>
       </div>
@@ -107,8 +109,8 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
             <p className="mt-3 text-[15px] font-bold">Sobre este NFT:</p><p className="mt-2 text-sm leading-6 text-[#bfa07a]">{short}</p>
             <p className="mt-1 text-[15px] font-bold">Edição:</p>{chips('mt-2', 'gap-2')}
             <div className="mt-[22px] flex items-center justify-between"><Qty qty={qty} setQty={setQty} max={max} pill="h-10 w-7" icon={14} gap="gap-4" />
-              <div className="flex gap-2"><button type="button" aria-disabled={soldOut} onClick={() => (soldOut ? undefined : notYet('Comprar'))} className="h-10 w-[131px] rounded bg-[#d18a4e] text-[13px] font-bold text-[#140d0b] aria-disabled:opacity-50">COMPRAR</button>
-                <button type="button" onClick={() => notYet('Favoritar')} className="flex h-10 w-[134px] items-center justify-center gap-1.5 rounded border border-[#d18a4e] text-[13px] text-[#e89b55]"><Heart size={14} />Favoritar</button></div></div>
+              <div className="flex gap-2"><button type="button" aria-disabled={soldOut} onClick={() => (soldOut ? undefined : requireAuth(() => notYet('Comprar')))} className="h-10 w-[131px] rounded bg-[#d18a4e] text-[13px] font-bold text-[#140d0b] aria-disabled:opacity-50">COMPRAR</button>
+                <button type="button" onClick={() => requireAuth(() => notYet('Favoritar'))} className="flex h-10 w-[134px] items-center justify-center gap-1.5 rounded border border-[#d18a4e] text-[13px] text-[#e89b55]"><Heart size={14} />Favoritar</button></div></div>
             {status && <div className="mt-1">{status}</div>}
             <ul className="mt-3 text-[15px] leading-8 text-[#bfa07a]">{meta.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1 flex items-center gap-2 text-[15px] font-bold">Compartilhar este NFT: <InIcon /><Mail size={14} aria-hidden /><BirdIcon /></p>

@@ -1,3 +1,4 @@
+import { authHandlers } from './auth'
 import { nftsHandlers } from './nfts'
 
-export const handlers = [...nftsHandlers]
+export const handlers = [...authHandlers, ...nftsHandlers]
