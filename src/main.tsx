@@ -1,3 +1,4 @@
+import { RealtimeBridge } from '@/shared/realtime/RealtimeBridge'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
@@ -23,7 +24,7 @@ async function enableMocking() {
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}><RealtimeBridge />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>,

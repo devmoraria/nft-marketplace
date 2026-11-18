@@ -4,9 +4,10 @@ import type { QuoteRequest } from '@/shared/api/types'
 import { useSession } from '@/features/auth/session'
 import { useCart } from '@/features/cart/queries'
 import { fmtEth } from '@/shared/lib/eth'
-import { getIdempotencyKey, networkLabel, useCreateOrder, useQuote, useWallets } from './queries'
+import { getIdempotencyKey, networkLabel, rememberTitles, useCreateOrder, useQuote, useWallets } from './queries'
 
 type Err = { status?: number; code?: string; message?: string; fields?: Record<string, string> }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function useCountdown(expiresAt?: string) {
   const [left, setLeft] = useState(0)
@@ -19,6 +20,8 @@ function useCountdown(expiresAt?: string) {
   }, [expiresAt])
   return left
 }
+
+const inputCls = 'mt-1 w-full rounded-lg border bg-transparent p-2'
 
 export function CheckoutPage({ coupon }: { coupon?: string }) {
   const session = useSession()
@@ -62,7 +65,7 @@ export function CheckoutPage({ coupon }: { coupon?: string }) {
     )
   }
 
-  if (cart && cart.items.length === 0) {
+  if (cart && cart.items.length === 0 && !createOrder.isPending && !createOrder.isSuccess) {
     return (
       <main className="mx-auto max-w-xl p-6 text-[#f3ece3]">
         <p>Seu carrinho está vazio.</p>
@@ -71,31 +74,51 @@ export function CheckoutPage({ coupon }: { coupon?: string }) {
     )
   }
 
-  const canSubmit =
-    !!quote.data && !!wallet && !expired && !createOrder.isPending && quote.data.issues.length === 0
+  const canSubmit = !!quote.data && !!wallet && !expired && !createOrder.isPending && !quote.isFetching && quote.data.issues.length === 0
+
+  function validate(): boolean {
+    const errs: Record<string, string> = {}
+    if (displayName.trim().length < 2) errs.displayName = 'Informe seu nome de exibição.'
+    if (!EMAIL_RE.test(email.trim())) errs.email = 'Informe um e-mail válido.'
+    setFieldErrors(errs)
+    if (Object.keys(errs).length) {
+      setMessage('Corrija os campos destacados.')
+      document.getElementById(errs.displayName ? 'displayName' : 'email')?.focus()
+      return false
+    }
+    return true
+  }
 
   function submit() {
-    if (!quote.data || !wallet) return
+    if (!quote.data || !wallet || createOrder.isPending) return
     setMessage(null)
-    setFieldErrors({})
+    if (!validate()) return
     const key = getIdempotencyKey(`${quote.data.quoteId}:${wallet.id}`)
+    const body = {
+      quoteId: quote.data.quoteId, walletId: wallet.id, network: wallet.network,
+      collector: { displayName: displayName.trim(), email: email.trim(), note: note || undefined },
+    }
+    rememberTitles(cart?.items ?? [])
+    try { sessionStorage.setItem('checkout:lastReq', JSON.stringify({ key, body })) } catch { /* ignore */ }
     createOrder.mutate(
-      { key, body: { quoteId: quote.data.quoteId, walletId: wallet.id, network: wallet.network, collector: { displayName, email, note: note || undefined } } },
+      { key, body },
       {
         onSuccess: (order) => void navigate({ to: '/orders/$orderId', params: { orderId: order.id } }),
         onError: (e) => {
           const err = e as unknown as Err
-          if (err.code === 'PRICE_CHANGED' || err.code === 'QUOTE_INVALID' || err.code === 'QUOTE_STALE') {
-            setMessage('O preço ou a cotação mudou. Revise o resumo e confirme de novo.')
+          if (err.code === 'PRICE_CHANGED' || err.code === 'QUOTE_INVALID') {
+            setMessage('O preço ou a disponibilidade mudou. Revise o resumo e confirme de novo.')
             void quote.refetch()
           } else if (err.code === 'QUOTE_EXPIRED' || err.status === 410) {
             setMessage('A cotação expirou. Atualizamos o valor, confirme novamente.')
             void quote.refetch()
-          } else if (err.code === 'VALIDATION_ERROR') {
+          } else if (err.code === 'VALIDATION_ERROR' || err.code === 'WALLET_NETWORK_MISMATCH') {
             setFieldErrors(err.fields ?? {})
-            setMessage(err.fields?.walletId ?? 'Confira os dados da carteira.')
+            setMessage(err.fields?.walletId ?? 'Confira os dados informados.')
+          } else if (err.status === 401) {
+            setMessage('Sua sessão expirou. Entre novamente; seus itens continuam no carrinho.')
           } else {
-            setMessage(err.message ?? 'Não foi possível criar o pedido. Tente de novo.')
+            setMessage('Não foi possível criar o pedido. Tente de novo: não haverá cobrança duplicada.')
           }
         },
       },
@@ -105,6 +128,7 @@ export function CheckoutPage({ coupon }: { coupon?: string }) {
   const q = quote.data
   const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0')
   const ss = String(secondsLeft % 60).padStart(2, '0')
+  const border = (k: string) => (fieldErrors[k] ? 'border-red-400' : 'border-[#3a2418]')
 
   return (
     <main className="mx-auto grid max-w-5xl gap-8 p-4 text-[#f3ece3] md:grid-cols-2 md:p-8">
@@ -113,15 +137,19 @@ export function CheckoutPage({ coupon }: { coupon?: string }) {
 
         <label className="block text-sm" htmlFor="displayName">Nome de exibição*</label>
         <input id="displayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)}
-          className="mb-3 mt-1 w-full rounded-lg border border-[#3a2418] bg-transparent p-2" />
+          aria-invalid={!!fieldErrors.displayName} aria-describedby={fieldErrors.displayName ? 'displayName-err' : undefined}
+          className={`${inputCls} ${border('displayName')}`} />
+        {fieldErrors.displayName && <p id="displayName-err" role="alert" className="mt-1 text-sm text-red-400">{fieldErrors.displayName}</p>}
 
-        <label className="block text-sm" htmlFor="email">E-mail*</label>
+        <label className="mt-3 block text-sm" htmlFor="email">E-mail*</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          className="mb-3 mt-1 w-full rounded-lg border border-[#3a2418] bg-transparent p-2" />
+          aria-invalid={!!fieldErrors.email} aria-describedby={fieldErrors.email ? 'email-err' : undefined}
+          className={`${inputCls} ${border('email')}`} />
+        {fieldErrors.email && <p id="email-err" role="alert" className="mt-1 text-sm text-red-400">{fieldErrors.email}</p>}
 
-        <label className="block text-sm" htmlFor="note">Observação do colecionador (opcional)</label>
+        <label className="mt-3 block text-sm" htmlFor="note">Observação do colecionador (opcional)</label>
         <textarea id="note" value={note} onChange={(e) => setNote(e.target.value)} rows={4}
-          className="mt-1 w-full rounded-lg border border-[#3a2418] bg-transparent p-2" />
+          className={`${inputCls} border-[#3a2418]`} />
       </section>
 
       <section aria-labelledby="resumo" className="space-y-4">
@@ -142,7 +170,7 @@ export function CheckoutPage({ coupon }: { coupon?: string }) {
             <label key={w.id} className="mb-2 flex cursor-pointer items-center gap-3 rounded-lg bg-[#22160f] p-3">
               <input type="radio" name="wallet" checked={wallet?.id === w.id} onChange={() => setWalletId(w.id)} />
               <span>
-                <strong>{w.label}</strong> · {networkLabel[w.network]}
+                <strong>{w.label}</strong> · {networkLabel[w.network] ?? w.network}
                 <br />
                 <span className="text-sm text-[#b89b78]">{w.address}</span>
               </span>
@@ -175,9 +203,9 @@ export function CheckoutPage({ coupon }: { coupon?: string }) {
 
         <button
           type="button"
-          disabled={!canSubmit}
-          onClick={submit}
-          className="w-full rounded-full bg-[#d18a4e] p-3 font-bold text-[#140d0b] disabled:opacity-50"
+          aria-disabled={!canSubmit}
+          onClick={() => canSubmit && submit()}
+          className="w-full rounded-full bg-[#d18a4e] p-3 font-bold text-[#140d0b] aria-disabled:opacity-50"
         >
           {createOrder.isPending ? 'Confirmando…' : 'Confirmar compra'}
         </button>
