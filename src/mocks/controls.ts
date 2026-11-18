@@ -1,5 +1,7 @@
 import { resetDb } from './db'
-import { disconnectSocket, emitStale, replayLastEvent, resetRealtime, resolveOrder } from './realtime'
+import {
+  disconnectSocket, emitStale, replayLastEvent, resetRealtime, resolveOrder, setNftPrice, setStock,
+} from './realtime'
 import { SCENARIOS, getScenario, resetRequestCounter, setScenario, type Scenario } from './scenarios'
 
 // Painel de controle para Playwright, demonstração e README: window.__mocks
@@ -16,6 +18,10 @@ export interface MockControls {
   replayLastEvent: () => boolean
   /** Envia o último evento com eventId novo e version menor (deve ser ignorado). */
   emitStale: () => boolean
+  /** Muda o preço do NFT (todas as edições), sobe a version e emite nft.updated. */
+  setNftPrice: (nftId: string, priceEth: string) => boolean
+  /** Muda o estoque de uma edição, sobe a version e emite nft.updated. */
+  setStock: (nftId: string, editionId: string, available: number) => boolean
 }
 
 declare global {
@@ -32,5 +38,7 @@ export function installControls(): void {
     disconnectSocket,
     replayLastEvent,
     emitStale,
+    setNftPrice,
+    setStock,
   }
 }

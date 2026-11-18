@@ -221,3 +221,32 @@ export function resetRealtime(): void {
   seenOrders.clear()
   seenNfts.clear()
 }
+/** Muda o preço de um NFT (e de todas as edições), sobe a versão e emite nft.updated. */
+export function setNftPrice(nftId: string, priceEth: string): boolean {
+  const ok = mutate((db) => {
+    const r = db.nfts.find((x) => x.id === nftId)
+    if (!r) return false
+    r.priceEth = priceEth
+    r.editions = r.editions.map((e) => ({ ...e, priceEth }))
+    r.version += 1
+    r.updatedAt = new Date().toISOString()
+    return true
+  })
+  if (ok) tick()
+  return ok
+}
+
+/** Muda o estoque de uma edição, sobe a versão e emite nft.updated. */
+export function setStock(nftId: string, editionId: string, available: number): boolean {
+  const ok = mutate((db) => {
+    const r = db.nfts.find((x) => x.id === nftId)
+    const ed = r?.editions.find((e) => e.id === editionId)
+    if (!r || !ed) return false
+    ed.available = available
+    r.version += 1
+    r.updatedAt = new Date().toISOString()
+    return true
+  })
+  if (ok) tick()
+  return ok
+}
