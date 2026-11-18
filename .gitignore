@@ -24,3 +24,12 @@ dist-ssr
 *.sw?
 
 contexto*.txt
+
+test-results/
+playwright-report/
+contexto*.txt
+
+test-results/
+playwright-report/
+contexto*.txt
+.backup-fidelidade/

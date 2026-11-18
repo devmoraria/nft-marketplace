@@ -48,14 +48,14 @@ export function revalidateSession(): Promise<void> {
   return inflight
 }
 
-const PRIVATE_KEYS = ['cart', 'favorites', 'orders', 'wallets', 'quote']
-
+// Guia, seção 8: logout limpa o cache privado (chaves ['user', uid, ...]) e o estado de checkout.
 export function useLogout(): () => Promise<void> {
   const qc = useQueryClient()
   return useCallback(async () => {
     try { await http.post('/auth/logout') } catch { /* sair localmente mesmo sem resposta */ }
     clearSession()
-    qc.removeQueries({ predicate: (q) => PRIVATE_KEYS.includes(String(q.queryKey[0])) })
+    qc.removeQueries({ queryKey: ['user'] })
+    try { sessionStorage.clear() } catch { /* modo privado */ }
     announce('Você saiu da sua conta.')
   }, [qc])
 }
