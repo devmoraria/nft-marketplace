@@ -128,12 +128,21 @@ function dropPeer(peer: Peer): void {
   if (!peers.size) stopTicker()
 }
 
-const socketLink = ws.link('*/socket.io/')
+const socketLink = ws.link('*')
 
 export const realtimeHandlers = [
-  socketLink.addEventListener('connection', (connection) => {
-    // Precisa ser síncrono: o binding agenda o handshake num microtask logo após esta chamada.
-    const io = toSocketIo(connection)
+    socketLink.addEventListener('connection', (connection) => {
+    if (!connection.client.url.pathname.startsWith('/socket.io')) {
+      connection.server.connect()
+      return
+    }
+    let io: ReturnType<typeof toSocketIo>
+    try {
+      io = toSocketIo(connection)
+    } catch (err) {
+      console.error('[mock-socket] toSocketIo falhou', err)
+      return
+    }
     const peer: Peer = {
       conn: connection,
       io,
@@ -151,7 +160,6 @@ export const realtimeHandlers = [
     startTicker()
   }),
 ]
-
 // ---------- controles para Playwright e demonstração (window.__mocks) ----------
 
 /** Vence agora o prazo do pedido pendente (o mais recente, se não informar o id) e emite order.updated. */

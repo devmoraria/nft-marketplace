@@ -1,6 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query'
 import Decimal from 'decimal.js'
-import { io } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
 import { getSession } from '@/features/auth/session'
 import type { Cart, CartItem, NftUpdatedEvent, Order, OrderUpdatedEvent } from '@/shared/api/types'
 import { EVENTS } from './events'
@@ -84,31 +84,40 @@ function onNftUpdated(qc: QueryClient, userId: string, dedup: Dedup, ev: NftUpda
 export function startRealtime(qc: QueryClient, userId: string): () => void {
   const dedup = new Dedup()
   let everConnected = false
+  let stopped = false
+  let socket: Socket | undefined
 
-  const socket = io({
-    transports: ['websocket'],
-    // Função: o token é relido a cada (re)conexão, então acompanha login e logout.
-    auth: (cb) => {
-      const s = getSession()
-      cb(s ? { token: s.token } : {})
-    },
-    reconnectionDelay: 500,
-    reconnectionDelayMax: 5000,
-  })
+  // Import dinâmico de propósito: o engine.io-client guarda o WebSocket global quando o módulo
+  // carrega. Se isso acontecer antes de o MSW iniciar, o mock nunca enxerga a conexão.
+  void import('socket.io-client').then(({ io }) => {
+    if (stopped) return
+    const s = io({
+      transports: ['websocket'],
+      // Função: o token é relido a cada (re)conexão, então acompanha login e logout.
+      auth: (cb) => {
+        const session = getSession()
+        cb(session ? { token: session.token } : {})
+      },
+      reconnectionDelay: 500,
+      reconnectionDelayMax: 5000,
+    })
+    socket = s
 
-  socket.on('connect', () => {
-    connected = true
-    // Reconexão: pode ter perdido eventos, então refaz as queries ativas.
-    if (everConnected) void qc.invalidateQueries()
-    everConnected = true
+    s.on('connect', () => {
+      connected = true
+      // Reconexão: pode ter perdido eventos, então refaz as queries ativas.
+      if (everConnected) void qc.invalidateQueries()
+      everConnected = true
+    })
+    s.on('disconnect', () => { connected = false })
+    s.on(EVENTS.orderUpdated, (ev: OrderUpdatedEvent) => onOrderUpdated(qc, userId, dedup, ev))
+    s.on(EVENTS.nftUpdated, (ev: NftUpdatedEvent) => onNftUpdated(qc, userId, dedup, ev))
   })
-  socket.on('disconnect', () => { connected = false })
-  socket.on(EVENTS.orderUpdated, (ev: OrderUpdatedEvent) => onOrderUpdated(qc, userId, dedup, ev))
-  socket.on(EVENTS.nftUpdated, (ev: NftUpdatedEvent) => onNftUpdated(qc, userId, dedup, ev))
 
   return () => {
-    socket.removeAllListeners()
-    socket.disconnect()
+    stopped = true
+    socket?.removeAllListeners()
+    socket?.disconnect()
     connected = false
   }
 }
