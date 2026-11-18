@@ -1,11 +1,11 @@
-import type { Cart, Order } from '@/shared/api/types'
+import type { Cart, Order, Quote, Wallet } from '@/shared/api/types'
 import { buildCoupons, type CouponRecord } from './fixtures/coupons'
 import { buildNftRecords, type NftRecord } from './fixtures/nfts'
 import { buildUsers, type UserRecord } from './fixtures/users'
 
 // "Servidor" em memória, espelhado no localStorage a cada mutação para o refresh funcionar.
 // Se mudar o formato, incremente DB_VERSION (o db antigo é descartado e refeito).
-const DB_VERSION = 1
+const DB_VERSION = 2
 const STORAGE_KEY = `mock:db:v${DB_VERSION}`
 
 export interface SessionRecord { token: string; userId: string; expiresAt: string }
@@ -21,6 +21,8 @@ export interface DbState {
   carts: Record<string, Cart> // userId ou cartId de visitante
   orders: OrderRecord[]
   idempotency: Record<string, { bodyHash: string; orderId: string }>
+  quotes: Record<string, Quote>
+  wallets: Record<string, Wallet[]> // userId -> carteiras
 }
 
 export function seedDb(): DbState {
@@ -34,6 +36,8 @@ export function seedDb(): DbState {
     carts: {},
     orders: [],
     idempotency: {},
+    quotes: {},
+    wallets: {},
   }
 }
 
