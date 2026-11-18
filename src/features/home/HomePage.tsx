@@ -2,10 +2,12 @@ import heroImg from '@/assets/nfts/emerald-ape-800.webp'
 import './skeleton.css'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
-import { ArrowRight, ChevronDown, ChevronRight, Heart, Search, ShoppingCart, SlidersHorizontal } from 'lucide-react'
+import { ArrowRight, ChevronDown, ChevronRight, Heart, Search, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
+import { MobileTabBar } from '@/components/layout/MobileTabBar'
+import { MobileHome } from './MobileHome'
 import { nftsQuery } from '@/features/catalog/queries'
 import type { Nft } from '@/shared/api/types'
 import { BANNERS, BLOG, CATEGORIES, NETWORKS, PRICE_BOUNDS, SORTS, TABS } from './figma-content'
@@ -61,25 +63,10 @@ export function HomePage() {
   const featured = items?.[3]
 
   return (
-    <div className="min-h-screen bg-[#140d0b] font-mono text-[#f3ece3]">
+    <div className="min-h-screen bg-[#140d0b] text-[#f3ece3]">
       <SiteHeader />
       <main className="mx-auto w-full max-w-[1200px]">
-        {/* MOBILE */}
-        <div className="px-[22px] pb-28 pt-9 md:hidden">
-          <div className="flex gap-3"><div className="flex h-[43px] flex-1 items-center gap-3 rounded-2xl bg-[#221612] px-4 text-[#b8946a]"><Search size={20} />Explorar coleções</div>
-            <button aria-label="Filtros" className="grid size-[42px] place-items-center rounded-2xl bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-[#140d0b]"><SlidersHorizontal size={20} /></button></div>
-          <section className="relative mt-6 h-[178px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#5a3a24] to-[#2a1c15] p-4">
-            <p className="text-[10px]">Bem-vindo à Kurio</p><h1 className="mt-2 text-[17px] font-bold leading-7">SEJA DONO DA<br />CULTURA DIGITAL</h1>
-            <p className="mt-2 w-[135px] text-[10px] leading-4 text-[#b8946a]">Descubra NFTs selecionados de criadores do mundo todo.</p>
-            <a href="#catalogo" className={`mt-1 inline-block text-[10px] font-bold ${accent}`}>EXPLORAR →</a>
-            <img src={heroImg} alt="" width={130} height={130} className="absolute right-4 top-[10px] size-[130px] rounded-2xl object-cover" />
-          </section>
-          <div className="mt-5 flex gap-4 text-[13px]">{TABS.map((t) => <button key={t.id} onClick={() => go({ tab: t.id })} className={tab === t.id ? 'border-b-2 border-[#d18a4e]' : ''}>{t.label}</button>)}</div>
-          <div id="catalogo" className="mt-5 grid grid-cols-2 gap-x-[15px]">
-            {[0, 1].map((col) => <div key={col} className={`space-y-4 ${col ? 'mt-[30px]' : ''}`}>{(items ?? []).filter((_, i) => i % 2 === col).map((n) => (
-              <a key={n.id} href={`/nft/${n.id}`} className="block rounded-[22px] bg-[#221612] p-2.5 text-[13px]"><img src={n.images[0]} alt={n.title} width={150} height={150} className="aspect-square w-full rounded-2xl object-cover" /><p className="mt-2">{n.title}</p><p className={`font-bold ${accent}`}>{n.priceEth} ETH</p></a>))}</div>)}
-          </div>
-        </div>
+        <MobileHome items={items} isPending={q.isPending} isError={q.isError} onRetry={() => q.refetch()} tab={tab} onTab={(id) => go({ tab: id })} />
 
         {/* DESKTOP */}
         <div className="hidden md:block">
@@ -94,7 +81,7 @@ export function HomePage() {
             <img src={heroImg} alt="Emerald Ape #042" width={450} height={450} className="size-[450px] rounded-[28px] object-cover" />
           </section>
 
-          <div id="catalogo" className="mt-24 grid grid-cols-[310px_1fr] gap-12">
+          <div id="catalogo" className="mt-24 grid grid-cols-[311px_1fr] gap-[45px]">
             <aside>
               <div className="bg-[#221612] p-5">
                 <h2 className="mb-3 text-lg font-bold">Coleções</h2>
@@ -122,11 +109,11 @@ export function HomePage() {
               {q.isError ? (
                 <div role="alert" className="grid h-[300px] place-items-center bg-[#221612] text-center"><div><p>Não foi possível carregar os NFTs.</p><p className="mt-1 text-xs text-[#b8946a]">{(q.error as { status?: number; code?: string; message?: string } | null)?.code ?? (q.error as Error | null)?.message}</p><button onClick={() => q.refetch()} className="mt-3 rounded bg-[#d18a4e] px-4 py-2 font-bold text-[#140d0b]">Tentar novamente</button></div></div>
               ) : q.isPending ? (
-                <div className="grid grid-cols-3 gap-x-[34px] gap-y-[60px]">{Array.from({ length: 9 }, (_, i) => <Skeleton key={i} />)}</div>
+                <div className="grid grid-cols-3 gap-x-[32px] gap-y-[60px]">{Array.from({ length: 9 }, (_, i) => <Skeleton key={i} />)}</div>
               ) : items?.length === 0 ? (
                 <div role="status" className="grid h-[300px] place-items-center bg-[#221612]">Nenhum NFT encontrado para esses filtros.</div>
               ) : (
-                <div className="grid grid-cols-3 gap-x-[34px] gap-y-[60px]">{items?.map((n) => <Card key={n.id} nft={n} />)}</div>
+                <div className="grid grid-cols-3 gap-x-[32px] gap-y-[60px]">{items?.map((n) => <Card key={n.id} nft={n} />)}</div>
               )}
               {q.data && q.data.totalPages > 1 && (
                 <nav aria-label="Paginação" className="mt-14 flex justify-end gap-2">
@@ -155,6 +142,7 @@ export function HomePage() {
           </section>
         </div>
       </main>
+      <MobileTabBar />
       <div className="hidden md:block"><SiteFooter /></div>
     </div>
   )

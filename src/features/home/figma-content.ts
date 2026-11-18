@@ -36,3 +36,4 @@ export const FOOTER = {
     ['Coleções', ['Arte digital', 'Fotografia', 'Música', 'Arte 3D', 'Utilidade']],
   ] as const,
 }
+export const RELATED_ORDER = ['Cosmic Bloom #118', 'Violet Nomad #314', 'Ivory Baron #088', 'Golden Beat #207', 'Golden Signal #160']

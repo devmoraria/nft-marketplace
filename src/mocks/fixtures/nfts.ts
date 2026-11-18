@@ -97,7 +97,7 @@ function generated(i: number): Seed {
 const SEEDS: Seed[] = [...FIGMA, ...Array.from({ length: 39 }, (_, i) => generated(i))]
 
 function editionsFor(i: number, price: string, soldOut: boolean): Edition[] {
-  const stock: [EditionName, number][] = [
+  const stock: [EditionName, number][] = i < FIGMA.length ? [['1/1', 1], ['1/10', 10], ['1/50', 50], ['ABERTA', 99]] : [
     ['1/1', i % 5 === 0 ? 0 : 1],
     ['1/10', i % 7 === 0 ? 0 : ((i * 3) % 10) + 1],
     ['1/50', ((i * 7) % 50) + 1],
