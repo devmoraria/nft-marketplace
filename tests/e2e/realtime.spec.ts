@@ -38,7 +38,8 @@ async function placeOrder(page: Page) {
   const added = page.waitForResponse(
     (r) => r.url().includes('/api/cart/items') && r.request().method() === 'POST',
   )
-  await page.getByRole('button', { name: 'COMPRAR', exact: true }).click()
+  // Desktop: "COMPRAR". Mobile: "Comprar NFT". O getByRole ignora o botão escondido.
+  await page.getByRole('button', { name: /^(COMPRAR|Comprar NFT)$/ }).click()
   await added
   await page.goto('/checkout')
   await page.locator('#displayName').fill('Ana Souza')
@@ -85,6 +86,15 @@ test('evento repetido ou antigo não muda a tela', async ({ page }) => {
   await page.waitForTimeout(1500)
   await expect(page.getByText('Seus NFTs agora estão na sua carteira')).toBeVisible()
   await expect(page.getByText('Processando seu pagamento')).toHaveCount(0)
+})
+
+test('depois de uma queda do socket, a tela se atualiza ao reconectar', async ({ page }) => {
+  await placeOrder(page)
+  await page.evaluate(() => window.__mocks!.disconnectSocket())
+  // O pedido muda enquanto o socket está fora.
+  await resolveNow(page)
+  // O cliente reconecta (~0,5 s) e refaz as queries; o polling também pode confirmar.
+  await expect(page.getByText('Seus NFTs agora estão na sua carteira')).toBeVisible({ timeout: 8000 })
 })
 
 test('nft.updated atualiza o preço no detalhe', async ({ page }) => {
