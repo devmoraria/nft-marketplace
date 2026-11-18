@@ -7,6 +7,8 @@ import { AppError } from '@/shared/api/http'
 import { login, signup } from './api'
 import { loginSchema, signupSchema, type LoginValues, type SignupValues } from './schemas'
 import { safeRedirect, setSession, useSession } from './session'
+import { useQueryClient } from '@tanstack/react-query'
+import { syncCartAfterLogin } from '@/features/cart/queries'
 
 type Mode = 'login' | 'signup'
 
@@ -89,6 +91,7 @@ function SubmitButton({ busy, children }: { busy: boolean; children: string }) {
 
 function LoginForm() {
   const [formError, setFormError] = useState<string | null>(null)
+  const qc = useQueryClient()
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
   })
@@ -96,6 +99,7 @@ function LoginForm() {
     setFormError(null)
     try {
       setSession(await login(values))
+      void syncCartAfterLogin(qc)
     } catch (e) {
       applyServerError(e, setError, ['email', 'password'], setFormError)
     }
@@ -114,6 +118,7 @@ function LoginForm() {
 
 function SignupForm() {
   const [formError, setFormError] = useState<string | null>(null)
+  const qc = useQueryClient()
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
   })
@@ -121,6 +126,7 @@ function SignupForm() {
     setFormError(null)
     try {
       setSession(await signup(values))
+      void syncCartAfterLogin(qc)
     } catch (e) {
       applyServerError(e, setError, ['name', 'email', 'password'], setFormError)
     }

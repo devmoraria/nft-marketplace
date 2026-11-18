@@ -1,11 +1,12 @@
 import '@/features/home/skeleton.css'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Link, getRouteApi } from '@tanstack/react-router'
+import { Link, getRouteApi, useRouter } from '@tanstack/react-router'
 import { ChevronLeft, Heart, Mail, Minus, Plus, Search, ShoppingCart, Star } from 'lucide-react'
 import { useState } from 'react'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { useRequireAuth } from '@/features/auth/useRequireAuth'
+import { useAddToCart } from '@/features/cart/queries'
 import { nftsQuery } from '@/features/catalog/queries'
 import { RELATED_ORDER } from '@/features/home/figma-content'
 import type { Nft } from '@/shared/api/types'
@@ -45,6 +46,8 @@ function Qty({ qty, setQty, max, pill, icon, gap }: { qty: number; setQty: (n: n
 
 function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
   const requireAuth = useRequireAuth()
+  const router = useRouter()
+  const add = useAddToCart()
   const first = nft.editions.find((e) => e.name === '1/50' && e.available > 0) ?? nft.editions.find((e) => e.available > 0) ?? nft.editions[0]
   const [edId, setEdId] = useState(first?.id), [qty, setQty] = useState(1), [img, setImg] = useState(0), [tab, setTab] = useState<'d' | 'r'>('d'), [dot, setDot] = useState(0)
   const ed = nft.editions.find((e) => e.id === edId) ?? nft.editions[0]
@@ -52,6 +55,10 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
   const related = [...others].sort((a, b) => rank(a.title) - rank(b.title))
   const dots = Math.min(3, Math.max(1, related.length - 4))
   const pick = (id: string) => { setEdId(id); setQty(1) }
+  const addToCart = (thenGo?: boolean) => {
+    if (!ed || soldOut) return
+    add.mutate({ nftId: nft.id, editionId: ed.id, quantity: qty }, { onSuccess: () => { if (thenGo) router.history.push('/cart') } })
+  }
   const short = `Um colecionável digital finalizado à mão da coleção Kurio Editions, verificado na ${net}, com arte desbloqueável e acesso para colecionadores.`
   const chips = (cls: string, gap: string) => (
     <div className={`flex flex-wrap ${gap} ${cls}`} role="radiogroup" aria-label="Edição">
@@ -89,8 +96,8 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
           </div>
           {status}
           <div className="mt-[18px] flex items-center gap-3">
-            <button type="button" aria-disabled={soldOut} onClick={() => (soldOut ? undefined : requireAuth(() => notYet('Comprar')))} className="h-[52px] w-[171px] rounded-full bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-sm font-bold text-[#140d0b] aria-disabled:opacity-50">Comprar NFT</button>
-            <button type="button" aria-label="Adicionar ao carrinho" onClick={() => requireAuth(() => notYet('Adicionar ao carrinho'))} className="grid size-[52px] place-items-center rounded-full border border-[#3b2a20] bg-[#34231b] text-[#cfb18c]"><ShoppingCart size={20} /></button>
+            <button type="button" aria-disabled={soldOut} onClick={() => addToCart(true)} className="h-[52px] w-[171px] rounded-full bg-gradient-to-br from-[#d18a4e] to-[#b8763f] text-sm font-bold text-[#140d0b] aria-disabled:opacity-50">Comprar NFT</button>
+            <button type="button" aria-label="Adicionar ao carrinho" onClick={() => addToCart()} className="grid size-[52px] place-items-center rounded-full border border-[#3b2a20] bg-[#34231b] text-[#cfb18c]"><ShoppingCart size={20} /></button>
           </div>
         </div>
       </div>
@@ -109,7 +116,7 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
             <p className="mt-3 text-[15px] font-bold">Sobre este NFT:</p><p className="mt-2 text-sm leading-6 text-[#bfa07a]">{short}</p>
             <p className="mt-1 text-[15px] font-bold">Edição:</p>{chips('mt-2', 'gap-2')}
             <div className="mt-[22px] flex items-center justify-between"><Qty qty={qty} setQty={setQty} max={max} pill="h-10 w-7" icon={14} gap="gap-4" />
-              <div className="flex gap-2"><button type="button" aria-disabled={soldOut} onClick={() => (soldOut ? undefined : requireAuth(() => notYet('Comprar')))} className="h-10 w-[131px] rounded bg-[#d18a4e] text-[13px] font-bold text-[#140d0b] aria-disabled:opacity-50">COMPRAR</button>
+              <div className="flex gap-2"><button type="button" aria-disabled={soldOut} onClick={() => addToCart(true)} className="h-10 w-[131px] rounded bg-[#d18a4e] text-[13px] font-bold text-[#140d0b] aria-disabled:opacity-50">COMPRAR</button>
                 <button type="button" onClick={() => requireAuth(() => notYet('Favoritar'))} className="flex h-10 w-[134px] items-center justify-center gap-1.5 rounded border border-[#d18a4e] text-[13px] text-[#e89b55]"><Heart size={14} />Favoritar</button></div></div>
             {status && <div className="mt-1">{status}</div>}
             <ul className="mt-3 text-[15px] leading-8 text-[#bfa07a]">{meta.map((m) => <li key={m}>{m}</li>)}</ul>
