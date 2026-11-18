@@ -13,7 +13,7 @@ import { nftQueryOptions } from '@/features/nft/queries'
 import type { CartItem, Nft, Quote } from '@/shared/api/types'
 import { useCart, useCartQuote, useRefreshPrices, useRemoveItem, useSetQuantity } from './queries'
 
-const CHECKOUT_PATH = '/checkout' // tela de Pagamento: ainda a criar
+const CHECKOUT_PATH = '/checkout' 
 const MAX_QTY = 10
 const accent = 'text-[#e89b55]'
 
@@ -163,7 +163,10 @@ export function CartPage() {
   const fallbackSubtotal = items.reduce((s, i) => s.plus(new Decimal(i.unitPriceEth).mul(i.quantity)), new Decimal(0)).toFixed()
 
   const onApply = (e: FormEvent) => { e.preventDefault(); setApplied(input.trim().toUpperCase()) }
-  const onCheckout = () => { if (ready) requireAuth(() => router.history.push(CHECKOUT_PATH)) }
+  const couponValid = !!q?.coupon?.valid && q.coupon.code === applied
+  const onCheckout = () => {
+  if (ready) requireAuth(() => router.history.push(couponValid ? `${CHECKOUT_PATH}?coupon=${encodeURIComponent(applied)}` : CHECKOUT_PATH))
+}
   const summary = (mobile: boolean) => (
     <Summary mobile={mobile} input={input} setInput={setInput} onApply={onApply} applied={applied} quote={q} fallbackSubtotal={fallbackSubtotal} ready={ready} loading={quote.isPending} onCheckout={onCheckout} />
   )
