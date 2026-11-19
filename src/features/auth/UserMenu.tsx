@@ -17,6 +17,7 @@ export function UserMenu({ className = '' }: { className?: string }) {
   return (
     <span className={`flex items-center gap-3 text-sm ${className}`}>
       <span data-testid="user-name" className="max-w-[140px] truncate text-[#f3ece3]">{session.user.name}</span>
+      <Link to="/perfil" className="font-semibold text-[#e89b55] hover:underline">Perfil</Link>
       <button type="button" onClick={() => void logout()} className="font-semibold text-[#e89b55] hover:underline">
         Sair
       </button>
