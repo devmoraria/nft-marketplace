@@ -57,7 +57,7 @@ test.beforeEach(async ({ page }) => {
   await resetMocks(page)
 })
 
-test.fixme('detalhe de NFT inexistente mostra mensagem', async ({ page }) => {
+test('detalhe de NFT inexistente mostra mensagem', async ({ page }) => {
   await page.goto('/nft/nft-9999')
   await expect(page.getByRole('alert')).toContainText('NFT não encontrado.')
 })
