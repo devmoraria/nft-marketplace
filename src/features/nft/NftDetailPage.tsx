@@ -1,5 +1,6 @@
 import '@/features/home/skeleton.css'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useFavorites, useToggleFavorite } from '@/features/favorites/queries'
 import { Link, getRouteApi, useRouter } from '@tanstack/react-router'
 import { ChevronLeft, Heart, Mail, Minus, Plus, Search, ShoppingCart, Star } from 'lucide-react'
 import { useState } from 'react'
@@ -15,8 +16,6 @@ import { nftQueryOptions } from './queries'
 const route = getRouteApi('/nft/$nftId')
 const NET: Record<string, string> = { ethereum: 'Ethereum', polygon: 'Polygon', solana: 'Solana' }
 const accent = 'text-[#e89b55]'
-// Carrinho e favoritos ainda não existem: avisa na região aria-live em vez de simular sucesso.
-const notYet = (what: string) => { const el = document.getElementById('live'); if (el) el.textContent = `${what} estará disponível quando o carrinho e os favoritos forem implementados.` }
 const rank = (t: string) => { const i = RELATED_ORDER.indexOf(t); return i === -1 ? 99 : i }
 
 // Ícones de marca inline: o lucide recente removeu os ícones de marca.
@@ -46,6 +45,10 @@ function Qty({ qty, setQty, max, pill, icon, gap }: { qty: number; setQty: (n: n
 
 function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
   const requireAuth = useRequireAuth()
+  const favs = useFavorites()
+  const toggleFav = useToggleFavorite()
+  const isFav = !!favs.data?.includes(nft.id)
+  const onFav = () => requireAuth(() => toggleFav.mutate({ nftId: nft.id, on: !isFav }))
   const router = useRouter()
   const add = useAddToCart()
   const first = nft.editions.find((e) => e.name === '1/50' && e.available > 0) ?? nft.editions.find((e) => e.available > 0) ?? nft.editions[0]
@@ -77,7 +80,7 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
       <div className="flex min-h-dvh flex-col md:hidden">
         <div className="relative px-[23px] pt-[57px]">
           <Link to="/" aria-label="Voltar" className="absolute left-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><ChevronLeft size={16} /></Link>
-          <button type="button" aria-label="Favoritar" onClick={() => requireAuth(() => notYet('Favoritar'))} className="absolute right-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><Heart size={15} /></button>
+          <button type="button" aria-label="Favoritar" aria-pressed={isFav} onClick={onFav} className="absolute right-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><Heart size={15} fill={isFav ? 'currentColor' : 'none'} /></button>
           <img src={nft.images[0]} alt={nft.title} width={315} height={315} className="aspect-square w-full rounded-2xl object-cover" />
         </div>
         <section className="relative -mt-[29px] flex-1 rounded-t-[28px] bg-[#221612] px-[21px] pb-[200px] pt-7">
@@ -117,7 +120,7 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
             <p className="mt-1 text-[15px] font-bold">Edição:</p>{chips('mt-2', 'gap-2')}
             <div className="mt-[22px] flex items-center justify-between"><Qty qty={qty} setQty={setQty} max={max} pill="h-10 w-7" icon={14} gap="gap-4" />
               <div className="flex gap-2"><button type="button" aria-disabled={soldOut} onClick={() => addToCart(true)} className="h-10 w-[131px] rounded bg-[#d18a4e] text-[13px] font-bold text-[#140d0b] aria-disabled:opacity-50">COMPRAR</button>
-                <button type="button" onClick={() => requireAuth(() => notYet('Favoritar'))} className="flex h-10 w-[134px] items-center justify-center gap-1.5 rounded border border-[#d18a4e] text-[13px] text-[#e89b55]"><Heart size={14} />Favoritar</button></div></div>
+                <button type="button" aria-pressed={isFav} onClick={onFav} className="flex h-10 w-[134px] items-center justify-center gap-1.5 rounded border border-[#d18a4e] text-[13px] text-[#e89b55]"><Heart size={14} fill={isFav ? 'currentColor' : 'none'} />{isFav ? 'Favoritado' : 'Favoritar'}</button></div></div>
             {status && <div className="mt-1">{status}</div>}
             <ul className="mt-3 text-[15px] leading-8 text-[#bfa07a]">{meta.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1 flex items-center gap-2 text-[15px] font-bold">Compartilhar este NFT: <InIcon /><Mail size={14} aria-hidden /><BirdIcon /></p>
