@@ -81,7 +81,7 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
         <div className="relative px-[23px] pt-[57px]">
           <Link to="/" aria-label="Voltar" className="absolute left-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><ChevronLeft size={16} /></Link>
           <button type="button" aria-label="Favoritar" aria-pressed={isFav} onClick={onFav} className="absolute right-6 top-5 z-10 grid size-[30px] place-items-center rounded-full border border-[#4a3326] bg-[#2b1c15] text-[#d18a4e]"><Heart size={15} fill={isFav ? 'currentColor' : 'none'} /></button>
-          <img src={nft.images[0]} alt={nft.title} width={315} height={315} className="aspect-square w-full rounded-2xl object-cover" />
+          <img src={nft.images[0]} alt={nft.title} width={315} height={315} fetchPriority="high" className="aspect-square w-full rounded-2xl object-cover" />
         </div>
         <section className="relative -mt-[29px] flex-1 rounded-t-[28px] bg-[#221612] px-[21px] pb-[200px] pt-7">
           <div className="flex items-center justify-between gap-3">
@@ -111,7 +111,7 @@ function Detail({ nft, others }: { nft: Nft; others: Nft[] }) {
         <section className="mt-[9px] grid grid-cols-[100px_442px_1fr] gap-x-[29px]">
           <div className="flex flex-col gap-4">{nft.images.slice(0, 4).map((_, i) => (
             <button key={i} type="button" aria-label={`Imagem ${i + 1}`} aria-current={i === img} onClick={() => setImg(i)} className={`size-[100px] overflow-hidden rounded-xl border ${i === img ? 'border-[#d18a4e]' : 'border-transparent'}`}><img src={nft.thumbnail} alt="" width={100} height={100} className="size-full object-cover" /></button>))}</div>
-          <div className="relative h-[443px] bg-[#221612] p-5"><img src={nft.images[img]} alt={nft.title} width={402} height={403} className="size-full rounded-2xl object-cover" /><span aria-hidden className="absolute right-8 top-8 text-[#140d0b]"><Search size={18} /></span></div>
+          <div className="relative h-[443px] bg-[#221612] p-5"><img src={nft.images[img]} alt={nft.title} width={402} height={403} fetchPriority="high" className="size-full rounded-2xl object-cover" /><span aria-hidden className="absolute right-8 top-8 text-[#140d0b]"><Search size={18} /></span></div>
           <div className="ml-[6px]">
             <h1 className="text-[28px] font-bold leading-9">{nft.title}</h1>
             <div className="mt-1 flex items-center justify-between border-b border-[#3b2a20] pb-2"><p className={`text-[22px] font-bold ${accent}`}>{price} ETH</p>
@@ -161,7 +161,7 @@ export function NftDetailPage() {
       <SiteHeader active="Mercado" />
       <main className="mx-auto w-full max-w-[1200px]">
         {q.isPending ? (
-          <div aria-busy className="px-[23px] pt-[57px] md:grid md:grid-cols-[100px_442px_1fr] md:gap-x-[29px] md:px-0 md:pt-[79px]"><div className="hidden md:block" /><div className="skeleton aspect-square md:aspect-auto md:h-[443px]" /><div className="skeleton mt-6 h-[300px] md:ml-[6px] md:mt-0" /></div>
+          <div aria-busy className="px-[23px] pt-[57px] md:grid md:grid-cols-[100px_442px_1fr] md:gap-x-[29px] md:px-0 md:pt-[79px] md:min-h-[1422px] md:content-start"><div className="hidden md:block" /><div className="skeleton aspect-square md:aspect-auto md:h-[443px]" /><div className="skeleton mt-6 h-[300px] md:ml-[6px] md:mt-0" /></div>
         ) : q.isError ? (
           <div role="alert" className="grid min-h-[50vh] place-items-center px-6 text-center"><div>
             <p>{err?.code === 'NFT_NOT_FOUND' ? 'NFT não encontrado.' : 'Não foi possível carregar este NFT.'}</p>
