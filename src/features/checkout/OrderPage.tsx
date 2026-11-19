@@ -9,16 +9,18 @@ const SLOW_AFTER_MS = 10_000
 export function OrderPage({ orderId }: { orderId: string }) {
   const qc = useQueryClient()
   const { data: order, isPending, isError, refetch } = useOrder(orderId)
-  const [slow, setSlow] = useState(false)
+  const [slowFired, setSlowFired] = useState(false)
   const [retrying, setRetrying] = useState(false)
   const [retryMsg, setRetryMsg] = useState<string | null>(null)
   const pending = order?.status === 'pending'
 
   useEffect(() => {
-    if (!pending) { setSlow(false); return }
-    const id = setTimeout(() => setSlow(true), SLOW_AFTER_MS)
-    return () => clearTimeout(id)
-  }, [pending, orderId])
+  if (!pending) return
+  const id = setTimeout(() => setSlowFired(true), SLOW_AFTER_MS)
+  return () => { clearTimeout(id); setSlowFired(false) }
+}, [pending, orderId])
+
+const slow = pending && slowFired
 
   // Reenvia a MESMA requisição com a MESMA Idempotency-Key: o servidor devolve o mesmo pedido (200), sem criar outro.
   async function retry() {
