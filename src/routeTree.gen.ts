@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CarteirasRouteImport } from './routes/carteiras'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -37,6 +38,11 @@ const CarteirasRoute = CarteirasRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/carteiras': typeof CarteirasRoute
   '/checkout': typeof CheckoutRoute
+  '/favoritos': typeof FavoritosRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/signup': typeof SignupRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/carteiras': typeof CarteirasRoute
   '/checkout': typeof CheckoutRoute
+  '/favoritos': typeof FavoritosRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/signup': typeof SignupRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/carteiras': typeof CarteirasRoute
   '/checkout': typeof CheckoutRoute
+  '/favoritos': typeof FavoritosRoute
   '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/signup': typeof SignupRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/carteiras'
     | '/checkout'
+    | '/favoritos'
     | '/login'
     | '/perfil'
     | '/signup'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/carteiras'
     | '/checkout'
+    | '/favoritos'
     | '/login'
     | '/perfil'
     | '/signup'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/carteiras'
     | '/checkout'
+    | '/favoritos'
     | '/login'
     | '/perfil'
     | '/signup'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CarteirasRoute: typeof CarteirasRoute
   CheckoutRoute: typeof CheckoutRoute
+  FavoritosRoute: typeof FavoritosRoute
   LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   SignupRoute: typeof SignupRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CarteirasRoute: CarteirasRoute,
   CheckoutRoute: CheckoutRoute,
+  FavoritosRoute: FavoritosRoute,
   LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   SignupRoute: SignupRoute,

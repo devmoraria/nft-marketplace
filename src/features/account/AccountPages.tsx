@@ -1,6 +1,7 @@
-﻿import { useId, useState, type FormEvent, type ReactNode } from 'react'
+import { useId, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, Navigate } from '@tanstack/react-router'
 import { SiteHeader } from '@/components/layout/SiteHeader'
+import { useLogout } from '@/features/auth/api'
 import { useSession } from '@/features/auth/session'
 import { NETWORKS, type Network, type Wallet } from '@/shared/api/types'
 import { apiFields, apiMessage, useChangePassword, useSaveWallet, useUpdateProfile, useWallets, type WalletInput } from './account'
@@ -48,8 +49,9 @@ function Status({ ok, fail }: { ok: string; fail: string }) {
   )
 }
 
-function Shell({ title, children }: { title: string; children: ReactNode }) {
+export function Shell({ title, children }: { title: string; children: ReactNode }) {
   const session = useSession()
+  const logout = useLogout()
   if (!session) return <Navigate to="/login" search={{ redirect: window.location.pathname }} />
   return (
     <div className="min-h-screen bg-[#140d0b] text-[#f3ece3]">
@@ -58,6 +60,8 @@ function Shell({ title, children }: { title: string; children: ReactNode }) {
         <nav aria-label="Conta" className="flex gap-5 text-sm text-[#e89b55]">
           <Link to="/perfil" className="underline-offset-4 aria-[current=page]:font-bold aria-[current=page]:underline">Perfil</Link>
           <Link to="/carteiras" className="underline-offset-4 aria-[current=page]:font-bold aria-[current=page]:underline">Carteiras</Link>
+          <a href="/favoritos" className="underline-offset-4">Favoritos</a>
+          <button type="button" onClick={() => void logout()} className="ml-auto font-semibold underline-offset-4 hover:underline md:hidden">Sair</button>
         </nav>
         <h1 className="mt-4 text-2xl font-bold">{title}</h1>
         {children}
@@ -209,6 +213,3 @@ export function WalletsPage() {
     </Shell>
   )
 }
-
-
-

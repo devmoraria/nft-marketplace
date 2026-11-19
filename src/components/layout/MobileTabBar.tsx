@@ -1,7 +1,7 @@
 import { Heart, House, ScanLine, ShoppingCart, User } from 'lucide-react'
 
-// Barra inferior do Figma mobile (Início). Favoritos e perfil ainda não têm rota: ficam desabilitados.
-const idle = 'grid size-11 place-items-center rounded-full text-[#cfb18c] disabled:cursor-not-allowed'
+// Barra inferior do Figma mobile. Início, favoritos, carrinho e perfil navegam; "Escanear" fica fora do escopo (desabilitado).
+const idle = 'grid size-11 place-items-center rounded-full text-[#cfb18c]'
 
 export function MobileTabBar() {
   return (
@@ -11,16 +11,16 @@ export function MobileTabBar() {
         <a href="/" aria-label="Início" aria-current="page" className="grid size-11 place-items-center justify-self-center rounded-full text-[#d18a4e]">
           <House size={22} className="fill-current" />
         </a>
-        <button type="button" disabled title="Em breve" aria-label="Favoritos" className={`${idle} justify-self-center`}>
+        <a href="/favoritos" aria-label="Favoritos" className={`${idle} justify-self-center`}>
           <Heart size={22} className="fill-current" />
-        </button>
+        </a>
         <span aria-hidden />
         <a href="/cart" aria-label="Carrinho" className={`${idle} justify-self-center`}>
           <ShoppingCart size={22} className="fill-current" />
         </a>
-        <button type="button" disabled title="Em breve" aria-label="Perfil" className={`${idle} justify-self-center`}>
+        <a href="/perfil" aria-label="Perfil" className={`${idle} justify-self-center`}>
           <User size={22} className="fill-current" />
-        </button>
+        </a>
       </div>
       <button
         type="button"
