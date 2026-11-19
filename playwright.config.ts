@@ -4,6 +4,7 @@ import { defineConfig, devices } from '@playwright/test'
 //   'npm run build && npm run preview -- --port 4173'   (exige VITE_ENABLE_MOCKS=true no .env.production)
 export default defineConfig({
   testDir: 'tests/e2e',
+  snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}{ext}',
   reporter: [['html', { open: 'never' }]],
   use: { baseURL: 'http://localhost:4173', trace: 'retain-on-failure', serviceWorkers: 'allow' },
   projects: [

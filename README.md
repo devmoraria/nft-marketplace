@@ -167,3 +167,14 @@ O MSW precisa estar no build publicado, porque o desafio exige os mocks e os flu
 | Imagem principal do detalhe sem `fetchpriority` | `fetchPriority="high"` nas imagens da galeria | Sem efeito isolado mensurável: Performance mobile do detalhe foi de 73 para 75 |
 
 A Performance mobile do início variou de 63 para 77 entre as duas rodadas sem nenhuma alteração nessa página (o TBT foi de 915 para 358 ms). Isso indica variação entre execuções em ambiente local com throttling simulado, e por isso a tabela usa a mediana de 3 medições.
+
+
+## Regressão visual
+
+Cobre início, detalhe, carrinho e pagamento nos viewports desktop (1440) e mobile (390), com dados estáveis: mocks resetados, movimento reduzido e imagens e fontes carregadas antes da captura.
+
+- Rodar: `npm run test:visual`
+- Regerar as baselines: `npm run test:visual:update` (revise as imagens antes do commit)
+- Baselines em `tests/e2e/__screenshots__/`, sem sufixo de sistema operacional.
+
+Limitação: as baselines foram geradas em Windows 10 com o Chromium do Playwright. Outro sistema operacional pode renderizar as fontes com pequenas diferenças; nesse caso, regere com o comando acima.
