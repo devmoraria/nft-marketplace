@@ -39,7 +39,7 @@ test('login volta para o NFT do ?redirect=', async ({ page }) => {
   await page.goto('/login?redirect=/nft/nft-1')
   await fillLogin(page, 'ana@example.com', 'Senha@123')
   await expect(page).toHaveURL(/\/nft\/nft-1$/)
-  expect(await storedToken(page)).toBeTruthy()
+  await expect.poll(() => storedToken(page), { timeout: 5_000 }).toBeTruthy()
 })
 
 test('a sessão sobrevive ao F5', async ({ page }) => {

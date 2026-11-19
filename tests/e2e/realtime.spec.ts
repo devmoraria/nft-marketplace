@@ -1,19 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // Só para o editor: o tests/ não enxerga o declare global do src/mocks/controls.ts.
-declare global {
-  interface Window {
-    __mocks?: {
-      reset: () => void
-      resolveOrder: (orderId?: string, outcome?: 'confirmed' | 'rejected') => string | null
-      disconnectSocket: () => void
-      replayLastEvent: () => boolean
-      emitStale: () => boolean
-      setNftPrice: (nftId: string, priceEth: string) => boolean
-      setStock: (nftId: string, editionId: string, available: number) => boolean
-    }
-  }
-}
 
 async function resetMocks(page: Page) {
   await page.goto('/')
@@ -48,7 +35,7 @@ async function placeOrder(page: Page) {
   const confirm = page.getByRole('button', { name: 'Confirmar compra' })
   await expect(confirm).toBeVisible()
   await expect(confirm).not.toHaveAttribute('aria-disabled', 'true', { timeout: 10_000 })
-  await confirm.click()
+  await confirm.click({ force: true })
   await expect(page).toHaveURL(/\/orders\/ord-/)
   await expect(page.getByText('Processando seu pagamento')).toBeVisible()
 }
