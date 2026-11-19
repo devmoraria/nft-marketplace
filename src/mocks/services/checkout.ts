@@ -179,11 +179,6 @@ export function createOrder(
   mutate((db) => {
     db.orders.push(record)
     db.idempotency[scoped] = { bodyHash, orderId: record.id }
-    const cart = db.carts[userId]
-    if (cart) {
-      cart.items = cart.items.filter((i) => !quote.lines.some((l) => l.nftId === i.nftId && l.editionId === i.editionId))
-      cart.version += 1
-    }
   })
   return { order: toOrder(record), replay: false }
 }
@@ -199,8 +194,16 @@ export function resolveDueOrders(now = Date.now()): OrderRecord[] {
       if (o.status !== 'pending' || o.resolveAt === undefined || o.resolveAt > now) continue
       o.status = o.outcome ?? 'confirmed'
       o.version += 1
-      if (o.status === 'confirmed') o.txRef = `0x${hex(64)}`
-      else o.rejectReason = 'PAYMENT_DECLINED'
+            if (o.status === 'confirmed') {
+        o.txRef = `0x${hex(64)}`
+        const cart = db.carts[o.userId]
+        if (cart) {
+          cart.items = cart.items.filter(
+            (i) => !o.receipt.items.some((l) => l.nftId === i.nftId && l.editionId === i.editionId),
+          )
+          cart.version += 1
+        }
+      } else o.rejectReason = 'PAYMENT_DECLINED'
       changed.push(o)
     }
     return changed
