@@ -139,12 +139,16 @@ test('lentidão mostra skeleton antes dos cards', async ({ page }) => {
   await expect(cards(page).first()).toBeVisible({ timeout: 10_000 })
 })
 
-// Pendente: o alerta de erro não apareceu na região "Catálogo" com o cenário server-error.
-// Investigar se o cenário afeta GET /api/nfts ou se o placeholderData esconde o erro.
-test.fixme('falha de servidor mostra erro e recupera com "Tentar novamente"', async ({ page }) => {
+// Os retries do TanStack Query atrasam o alerta de erro por varios segundos; por isso o timeout maior.
+test('falha de servidor mostra erro e recupera com "Tentar novamente"', async ({ page }) => {
+  test.setTimeout(60_000)
   await page.goto('/?scenario=server-error')
-  await expect(catalog(page).getByRole('alert')).toContainText('Não foi possível carregar os NFTs.')
-  await page.evaluate(() => window.__mocks!.setScenario('default'))
+  await expect(catalog(page).getByRole('alert')).toContainText('Não foi possível carregar os NFTs.', { timeout: 25_000 })
+  // A URL (?scenario=) vence o setScenario no mock: limpe o parametro tambem.
+  await page.evaluate(() => {
+    window.__mocks!.setScenario('default')
+    history.replaceState(null, '', location.pathname)
+  })
   await catalog(page).getByRole('button', { name: 'Tentar novamente' }).click()
   await expect(cards(page).first()).toBeVisible()
 })
