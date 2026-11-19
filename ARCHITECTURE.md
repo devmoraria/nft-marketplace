@@ -123,7 +123,11 @@ Resultados, ambiente e análise das auditorias Lighthouse estão no [README.md](
 - O servidor Socket.IO simulado não é compartilhado entre abas (ver "Transporte e limitações").
 - Performance mobile abaixo da meta (ver "Performance").
 - A atualização do catálogo e do detalhe por evento usa o prefixo da chave da consulta (`nft` ou `catalog`); consultas novas fora desse prefixo não são atualizadas por `nft.updated`.
+- Nos mocks, o parâmetro `?scenario=` da URL tem prioridade sobre `setScenario()` a cada requisição; para voltar ao cenário padrão depois de usá-lo, é preciso limpar o parâmetro da URL (os testes fazem isso).
 
 ## Desvios do Figma e decisões de UX
 
-Pendente: substituições de asset, estados que não existiam nos frames (Perfil, Carteiras e Confirmação em mobile) e ajustes de acessibilidade em relação ao layout.
+- Perfil, Carteiras e Confirmação em mobile não têm frame: seguem o padrão visual (cores, tipografia e espaçamento) das telas desenhadas.
+- A home mobile é um componente próprio (`MobileHome`). Os filtros do catálogo abrem em um `<dialog>` nativo (`showModal`), que prende o foco e fecha com Esc.
+- O skeleton do detalhe no desktop reserva a altura final do conteúdo para evitar deslocamento de layout (CLS do detalhe: 0,599 antes, 0,019 depois).
+- Feedback de mutations e de tempo real usa regiões `role="status"` e `role="alert"`.
