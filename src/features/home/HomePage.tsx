@@ -1,11 +1,12 @@
 import heroImg from '@/assets/nfts/emerald-ape-800.webp'
 import './skeleton.css'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { getRouteApi } from '@tanstack/react-router'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import { ArrowRight, ChevronDown, ChevronRight, Heart, Search, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
+import { CatalogLink } from '@/shared/CatalogLink'
 import { MobileTabBar } from '@/components/layout/MobileTabBar'
 import { MobileHome } from './MobileHome'
 import { nftsQuery } from '@/features/catalog/queries'
@@ -18,14 +19,15 @@ const accent = 'text-[#e89b55]'
 
 function Card({ nft }: { nft: Nft }) {
   return (
-    <article className="group relative w-full">
+    <article className="group relative w-full motion-safe:transition-transform motion-safe:duration-200 motion-safe:hover:-translate-y-1">
+      <Link to="/nft/$nftId" params={{ nftId: nft.id }} aria-hidden tabIndex={-1} className="absolute inset-0 z-[1]" />
       <div className="relative grid h-[300px] place-items-center bg-[#221612]">
         {nft.badge && <span className="absolute left-0 top-0 bg-[#d18a4e] px-3 py-1 text-sm text-[#140d0b]">{nft.badge}</span>}
         <img src={nft.thumbnail} alt={nft.title} width={250} height={250} loading="lazy" className="size-[250px] rounded-[14px] object-contain" />
-        <div className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 gap-2 group-focus-within:flex group-hover:flex">
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 opacity-0 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100 motion-safe:transition-opacity motion-safe:duration-200">
           <button disabled aria-label="Adicionar ao carrinho" className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3]"><ShoppingCart size={16} /></button>
           <button disabled aria-label="Favoritar" className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3]"><Heart size={16} /></button>
-          <a href={`/nft/${nft.id}`} aria-label={`Ver ${nft.title}`} className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3]"><Search size={16} /></a>
+          <Link to="/nft/$nftId" params={{ nftId: nft.id }} aria-label={`Ver ${nft.title}`} className="grid size-9 place-items-center rounded bg-[#140d0b] text-[#f3ece3] hover:bg-[#d18a4e] hover:text-[#140d0b] motion-safe:transition-colors"><Search size={16} /></Link>
         </div>
       </div>
       <h3 className="mt-[10px] text-base text-[#f3ece3]">{nft.title}</h3>
@@ -75,7 +77,7 @@ export function HomePage() {
               <p className="mb-2 text-base">Bem-vindo à Kurio</p>
               <h1 className="text-[43px] font-bold leading-[70px]">SEJA DONO DO FUTURO<br />DA ARTE DIGITAL</h1>
               <p className="mt-0.5 max-w-[550px] text-sm leading-6 text-[#b8946a]">Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.</p>
-              <a href="#catalogo" className="mt-8 inline-grid h-10 w-[140px] place-items-center rounded-md bg-[#d18a4e] text-sm font-bold text-[#140d0b]">EXPLORAR</a>
+              <CatalogLink className="mt-8 inline-grid h-10 w-[140px] place-items-center rounded-md bg-[#d18a4e] text-sm font-bold text-[#140d0b] hover:brightness-110 motion-safe:transition motion-safe:hover:-translate-y-0.5">EXPLORAR</CatalogLink>
             </div>
             <div className="absolute bottom-[43px] left-[600px] flex gap-1.5" aria-hidden>{[0, 1, 2].map((i) => <i key={i} className="size-2 rounded-full bg-[#d18a4e]" />)}</div>
             <img src={heroImg} alt="Emerald Ape #042" width={450} height={450} className="size-[450px] rounded-[28px] object-cover" />
@@ -128,7 +130,7 @@ export function HomePage() {
             {BANNERS.map((b, i) => (
               <div key={i} className="flex h-[250px] overflow-hidden rounded-xl bg-[#221612]">
                 {art(items, b.art, i) ? <img src={art(items, b.art, i)} alt="" width={288} height={250} loading="lazy" className="h-full w-[288px] object-cover" /> : <div className="skeleton h-full w-[288px]" />}
-                <div className="flex flex-1 flex-col items-end justify-start pr-[30px] pt-[37px] text-right"><h2 className="text-lg font-bold leading-6">{b.title[0]}<br />{b.title[1]}</h2><p className="mb-3.5 mt-3.5 max-w-[262px] text-sm leading-6 text-[#b8946a]">{b.text}</p><a href="#catalogo" className="inline-flex h-[38px] items-center gap-1 rounded bg-[#d18a4e] px-6 text-sm font-bold text-[#140d0b]">Explorar<ArrowRight size={16} /></a></div>
+                <div className="flex flex-1 flex-col items-end justify-start pr-[30px] pt-[37px] text-right"><h2 className="text-lg font-bold leading-6">{b.title[0]}<br />{b.title[1]}</h2><p className="mb-3.5 mt-3.5 max-w-[262px] text-sm leading-6 text-[#b8946a]">{b.text}</p><CatalogLink className="inline-flex h-[38px] items-center gap-1 rounded bg-[#d18a4e] px-6 text-sm font-bold text-[#140d0b] hover:brightness-110 motion-safe:transition motion-safe:hover:-translate-y-0.5">Explorar<ArrowRight size={16} /></CatalogLink></div>
               </div>))}
           </section>
 
@@ -137,7 +139,7 @@ export function HomePage() {
             <div className="mt-9 flex gap-6 text-left">{BLOG.posts.map((p) => (
               <article key={p.title} className="w-[268px] overflow-hidden rounded-lg bg-[#221612]">
                 {art(items, p.art) ? <img src={art(items, p.art)} alt="" width={268} height={195} loading="lazy" className="h-[195px] w-full object-cover object-top" /> : <div className="skeleton h-[195px]" />}
-                <div className="p-4"><p className="text-xs leading-4 text-[#b8946a]">{p.date} | Leitura de {p.read}</p><h3 className="mt-2.5 text-base font-bold leading-[21px]">{p.title}</h3><p className="mt-2 text-xs leading-4 text-[#b8946a]">{p.text}</p><a href="#catalogo" className={`mt-3 inline-block text-xs font-bold ${accent}`}>Ler mais →</a></div>
+                <div className="p-4"><p className="text-xs leading-4 text-[#b8946a]">{p.date} | Leitura de {p.read}</p><h3 className="mt-2.5 text-base font-bold leading-[21px]">{p.title}</h3><p className="mt-2 text-xs leading-4 text-[#b8946a]">{p.text}</p><span aria-disabled="true" title="Em breve" className={`mt-3 inline-block cursor-not-allowed text-xs font-bold ${accent}`}>Ler mais →</span></div>
               </article>))}</div>
           </section>
         </div>

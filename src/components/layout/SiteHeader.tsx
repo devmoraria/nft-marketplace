@@ -1,9 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { LogIn, LogOut, Search, ShoppingCart } from 'lucide-react'
+import { LogIn, LogOut, ShoppingCart } from 'lucide-react'
 import { useLogout } from '@/features/auth/api'
 import { useSession } from '@/features/auth/session'
 import { useCartCount } from '@/features/cart/queries'
 import { NAV } from '@/features/home/figma-content'
+import { HeaderSearch } from './HeaderSearch'
 
 export function SiteHeader({ active = 'Início' }: { active?: string }) {
   const session = useSession()
@@ -16,13 +17,14 @@ export function SiteHeader({ active = 'Início' }: { active?: string }) {
         {NAV.map((n) => (
           <a key={n} href={n === 'Início' ? '/' : undefined} aria-current={n === active ? 'page' : undefined}
             aria-disabled={n !== 'Início' || undefined}
-            className={`relative flex items-center text-base ${n === active ? 'font-bold text-[#e89b55] after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-[#d18a4e]' : 'text-[#f3ece3]'}`}>
+            title={n !== 'Início' ? 'Em breve' : undefined}
+            className={`relative flex items-center text-base ${n !== 'Início' ? 'cursor-not-allowed ' : ''}${n === active ? 'font-bold text-[#e89b55] after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-[#d18a4e]' : 'text-[#f3ece3]'}`}>
             {n}
           </a>
         ))}
       </nav>
       <div className="flex items-center gap-6">
-        <button aria-label="Buscar" className="text-[#f3ece3]"><Search size={22} /></button>
+        <HeaderSearch />
         <Link to="/cart" aria-label="Carrinho" className="relative text-[#f3ece3]">
             <ShoppingCart size={22} />
             {cartCount > 0 && <span data-testid="cart-badge" className="absolute -right-2 -top-2 grid size-4 place-items-center rounded-full bg-[#d18a4e] text-[9px] font-bold text-[#140d0b]">{cartCount}</span>}

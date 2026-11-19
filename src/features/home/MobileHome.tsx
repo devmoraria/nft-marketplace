@@ -53,7 +53,7 @@ export function MobileHome({ items, isPending, isError, onRetry, tab, onTab }: P
           <p className="text-[11px] leading-4">Bem-vindo à Kurio</p>
           <h1 className="mt-[3px] text-base font-bold leading-[25.5px]">SEJA DONO DA<br />CULTURA DIGITAL</h1>
           <p className="mt-1.5 w-[168px] text-[10.5px] leading-[15.5px] text-[#bfa07a]">Descubra NFTs selecionados de criadores do mundo todo.</p>
-          <a href="#catalogo" className="inline-flex items-center gap-1.5 text-[10.5px] font-bold leading-4 text-[#e89b55]">EXPLORAR<ArrowRight size={12} aria-hidden /></a>
+          <a href="#catalogo-mobile" className="inline-flex items-center gap-1.5 text-[10.5px] font-bold leading-4 text-[#e89b55]">EXPLORAR<ArrowRight size={12} aria-hidden /></a>
         </div>
         <img src={heroImg} alt="" width={120} height={120} className="absolute right-3.5 top-[9px] size-[120px] rounded-[14px] object-cover" />
         {sage && <img src={sage.thumbnail} alt="" width={51} height={51} className="absolute left-[197px] top-[86px] size-[51px] rounded-[10px] object-cover" />}
@@ -66,7 +66,7 @@ export function MobileHome({ items, isPending, isError, onRetry, tab, onTab }: P
         ))}
       </div>
 
-      <div id="catalogo" className="mt-[15px]">
+      <div id="catalogo-mobile" className="mt-[15px]">
         {isError ? (
           <div role="alert" className="grid h-[175px] place-items-center rounded-[20px] bg-[#221612] text-center text-xs"><div>Não foi possível carregar os NFTs.<button type="button" onClick={onRetry} className="mt-2 block w-full font-bold text-[#e89b55] underline">Tentar novamente</button></div></div>
         ) : isPending ? (
